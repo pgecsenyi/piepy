@@ -1,0 +1,527 @@
+{
+	"_type": "export",
+	"__export_format": 3,
+	"__export_date": "2017-03-11T14:18:49.486Z",
+	"__export_source": "insomnia.desktop.app:v4.2.14",
+	"resources": [
+		{
+			"_id": "wrk_1e1c271e42474456a7688535c291b636",
+			"parentId": null,
+			"modified": 1489241478888,
+			"created": 1489237563102,
+			"name": "PiE",
+			"description": "",
+			"certificates": [],
+			"_type": "workspace"
+		},
+		{
+			"_id": "env_80f6381dea894a21ac8a597de17ad898",
+			"parentId": "wrk_1e1c271e42474456a7688535c291b636",
+			"modified": 1489241498070,
+			"created": 1489237572520,
+			"name": "Base Environment",
+			"data": {
+				"base_url": "localhost:8095/"
+			},
+			"_type": "environment"
+		},
+		{
+			"_id": "jar_7acb0134037d49e9a86d71e6ec5bdb38",
+			"parentId": "wrk_1e1c271e42474456a7688535c291b636",
+			"modified": 1489238175013,
+			"created": 1489237618848,
+			"name": "Default Jar",
+			"cookies": [],
+			"_type": "cookie_jar"
+		},
+		{
+			"_id": "fld_7e7df1d1941a4db1980d0cfb092c451e",
+			"parentId": "wrk_1e1c271e42474456a7688535c291b636",
+			"modified": 1489241672997,
+			"created": 1489238205883,
+			"name": "Maintenance",
+			"environment": {},
+			"metaSortKey": -1489240775965,
+			"_type": "request_group"
+		},
+		{
+			"_id": "fld_1863982c23e746128535064ce69a75f8",
+			"parentId": "wrk_1e1c271e42474456a7688535c291b636",
+			"modified": 1489241632659,
+			"created": 1489241632659,
+			"name": "Audio",
+			"environment": {},
+			"metaSortKey": -1489241632659,
+			"_type": "request_group"
+		},
+		{
+			"_id": "fld_77296a0ef92b4175a8b0e968ccc81c25",
+			"parentId": "wrk_1e1c271e42474456a7688535c291b636",
+			"modified": 1489241670286,
+			"created": 1489241666503,
+			"name": "Playlist",
+			"environment": {},
+			"metaSortKey": -1489239919271,
+			"_type": "request_group"
+		},
+		{
+			"_id": "fld_764dcdb3a9544abe9960737df421bc4c",
+			"parentId": "wrk_1e1c271e42474456a7688535c291b636",
+			"modified": 1489241729754,
+			"created": 1489241711969,
+			"name": "Video",
+			"environment": {},
+			"metaSortKey": -1489239919221,
+			"_type": "request_group"
+		},
+		{
+			"_id": "req_2c8913148a99474eafdde4f893c664d5",
+			"parentId": "fld_7e7df1d1941a4db1980d0cfb092c451e",
+			"modified": 1489238945468,
+			"created": 1489237613428,
+			"url": "{{base_url}}status",
+			"name": "Status",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237672268,
+			"_type": "request"
+		},
+		{
+			"_id": "req_6a9402360d3f4d95b1174f1856c61f20",
+			"parentId": "fld_7e7df1d1941a4db1980d0cfb092c451e",
+			"modified": 1489238904027,
+			"created": 1489237672218,
+			"url": "{{base_url}}rebuild",
+			"name": "Rebuild",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237672318,
+			"_type": "request"
+		},
+		{
+			"_id": "req_3efabc9353c34c8c8a9492ed8f8cae53",
+			"parentId": "fld_1863982c23e746128535064ce69a75f8",
+			"modified": 1489241737778,
+			"created": 1489241083164,
+			"url": "{{base_url}}audio/artists",
+			"name": "Artists",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237672243,
+			"_type": "request"
+		},
+		{
+			"_id": "req_2b1c0442062b46289ae89c306fb6e8aa",
+			"parentId": "fld_1863982c23e746128535064ce69a75f8",
+			"modified": 1489241742642,
+			"created": 1489241129552,
+			"url": "{{base_url}}audio/albums",
+			"name": "Albums",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237672193,
+			"_type": "request"
+		},
+		{
+			"_id": "req_82c3ab648e1d49b0a603aab270203455",
+			"parentId": "fld_1863982c23e746128535064ce69a75f8",
+			"modified": 1489241747325,
+			"created": 1489241167664,
+			"url": "{{base_url}}audio/tracks?album=2",
+			"name": "Tracks / 2",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237672143,
+			"_type": "request"
+		},
+		{
+			"_id": "req_505de546e1974267b8bc437cd13219fd",
+			"parentId": "fld_1863982c23e746128535064ce69a75f8",
+			"modified": 1489241751285,
+			"created": 1489241213626,
+			"url": "{{base_url}}audio/player/play/26",
+			"name": "Play / 26",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237672093,
+			"_type": "request"
+		},
+		{
+			"_id": "req_0f3352de90ea42609064488a558b2257",
+			"parentId": "fld_1863982c23e746128535064ce69a75f8",
+			"modified": 1489241754886,
+			"created": 1489241242983,
+			"url": "{{base_url}}audio/player/stop",
+			"name": "Stop",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237672043,
+			"_type": "request"
+		},
+		{
+			"_id": "req_e6a9cf86a2174870a1c9605b7489fa3b",
+			"parentId": "fld_77296a0ef92b4175a8b0e968ccc81c25",
+			"modified": 1489241761945,
+			"created": 1489238800309,
+			"url": "{{base_url}}playlist/add",
+			"name": "Add list",
+			"method": "PUT",
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n  \"title\": \"Test playlist\",\n  \"tracks\": [\n    {\n      \"category\": \"video\",\n      \"file\": 3,\n      \"audioout\": \"analog\"\n    }\n  ]\n}\n"
+			},
+			"parameters": [],
+			"headers": [
+				{
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"authentication": {},
+			"metaSortKey": -1489237671918,
+			"_type": "request"
+		},
+		{
+			"_id": "req_c6e3630822e44fed9a9b05716ea91647",
+			"parentId": "fld_77296a0ef92b4175a8b0e968ccc81c25",
+			"modified": 1489241769122,
+			"created": 1489240387007,
+			"url": "{{base_url}}playlist/add-track",
+			"name": "Add track 1",
+			"method": "PUT",
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n  \"playlist\" : 1,\n  \"category\": \"audio\",\n  \"file\": 2,\n  \"audioout\": \"digital\"\n}\n"
+			},
+			"parameters": [],
+			"headers": [
+				{
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"authentication": {},
+			"metaSortKey": -1489237671868,
+			"_type": "request"
+		},
+		{
+			"_id": "req_f7c083ec30d740139b572a222fc8bc0e",
+			"parentId": "fld_77296a0ef92b4175a8b0e968ccc81c25",
+			"modified": 1489241783644,
+			"created": 1489240595783,
+			"url": "{{base_url}}playlist/delete/2",
+			"name": "Delete list",
+			"method": "DELETE",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237671718,
+			"_type": "request"
+		},
+		{
+			"_id": "req_2a34383545bf4277a83c476af404d88f",
+			"parentId": "fld_77296a0ef92b4175a8b0e968ccc81c25",
+			"modified": 1489241796082,
+			"created": 1489240649079,
+			"url": "{{base_url}}playlist/next",
+			"name": "Next",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237671568,
+			"_type": "request"
+		},
+		{
+			"_id": "req_f9452b27f9b14f359b79014751cd25d3",
+			"parentId": "fld_77296a0ef92b4175a8b0e968ccc81c25",
+			"modified": 1489241788121,
+			"created": 1489240705879,
+			"url": "{{base_url}}playlist/delete-track/3",
+			"name": "Delete track",
+			"method": "DELETE",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237671668,
+			"_type": "request"
+		},
+		{
+			"_id": "req_33e6bcdcbddf4339861b9a7214af592b",
+			"parentId": "fld_77296a0ef92b4175a8b0e968ccc81c25",
+			"modified": 1489241773797,
+			"created": 1489240771048,
+			"url": "{{base_url}}playlist/add-track",
+			"name": "Add track 2",
+			"method": "PUT",
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n  \"playlist\" : 1,\n  \"category\": \"video\",\n  \"file\": 5,\n  \"audioout\": \"analog\"\n}\n"
+			},
+			"parameters": [],
+			"headers": [
+				{
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"authentication": {},
+			"metaSortKey": -1489237671818,
+			"_type": "request"
+		},
+		{
+			"_id": "req_e05b570982ce462d96ccdc6956d8a6ed",
+			"parentId": "fld_77296a0ef92b4175a8b0e968ccc81c25",
+			"modified": 1489241778148,
+			"created": 1489240792896,
+			"url": "{{base_url}}playlist/add-track",
+			"name": "Add track 3",
+			"method": "PUT",
+			"body": {
+				"mimeType": "application/json",
+				"text": "{\n  \"playlist\" : 1,\n  \"category\": \"audio\",\n  \"file\": 4\n}\n"
+			},
+			"parameters": [],
+			"headers": [
+				{
+					"name": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"authentication": {},
+			"metaSortKey": -1489237671768,
+			"_type": "request"
+		},
+		{
+			"_id": "req_d9f65de5d70e4f679a61004a08439edb",
+			"parentId": "fld_77296a0ef92b4175a8b0e968ccc81c25",
+			"modified": 1489241792132,
+			"created": 1489240959439,
+			"url": "{{base_url}}playlist/play/1",
+			"name": "Play",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237671618,
+			"_type": "request"
+		},
+		{
+			"_id": "req_5ef1db89599b44b7b2b54ffd97536c13",
+			"parentId": "fld_77296a0ef92b4175a8b0e968ccc81c25",
+			"modified": 1489241815892,
+			"created": 1489240993616,
+			"url": "{{base_url}}playlist/stop",
+			"name": "Stop",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237671468,
+			"_type": "request"
+		},
+		{
+			"_id": "req_babd96b54b4c428a8322bbe46d09dfb1",
+			"parentId": "fld_77296a0ef92b4175a8b0e968ccc81c25",
+			"modified": 1489241799279,
+			"created": 1489241034882,
+			"url": "{{base_url}}playlist/prev",
+			"name": "Previous",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237671518,
+			"_type": "request"
+		},
+		{
+			"_id": "req_752e0a7c4043432aa6646a80bab3301d",
+			"parentId": "fld_77296a0ef92b4175a8b0e968ccc81c25",
+			"modified": 1489241887003,
+			"created": 1489241876028,
+			"url": "{{base_url}}playlist/all",
+			"name": "Playlists",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489241876028,
+			"_type": "request"
+		},
+		{
+			"_id": "req_2c13f8b3196a44a4adbbff042a8986a4",
+			"parentId": "fld_764dcdb3a9544abe9960737df421bc4c",
+			"modified": 1489241821778,
+			"created": 1489238249151,
+			"url": "{{base_url}}video/titles",
+			"name": "Titles",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237672218,
+			"_type": "request"
+		},
+		{
+			"_id": "req_8e59fce3842c47b4a9456be879eef960",
+			"parentId": "fld_764dcdb3a9544abe9960737df421bc4c",
+			"modified": 1489241827513,
+			"created": 1489238299579,
+			"url": "{{base_url}}video/titles?parent=8",
+			"name": "Titles / 8",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237672168,
+			"_type": "request"
+		},
+		{
+			"_id": "req_9de1d98683b44f9184a42b7e2952de81",
+			"parentId": "fld_764dcdb3a9544abe9960737df421bc4c",
+			"modified": 1489241830838,
+			"created": 1489238322069,
+			"url": "{{base_url}}video/details/9",
+			"name": "Details / 9",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237672118,
+			"_type": "request"
+		},
+		{
+			"_id": "req_f5b2ec3052f54e4289b4df42d72525f7",
+			"parentId": "fld_764dcdb3a9544abe9960737df421bc4c",
+			"modified": 1489241834742,
+			"created": 1489238673644,
+			"url": "{{base_url}}video/player/play?id=3&subtitle=1",
+			"name": "Play / 3-1",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237672068,
+			"_type": "request"
+		},
+		{
+			"_id": "req_83340ffc90e7431a93f51c8c5c7c6712",
+			"parentId": "fld_764dcdb3a9544abe9960737df421bc4c",
+			"modified": 1489241838216,
+			"created": 1489238709816,
+			"url": "{{base_url}}video/player/forward",
+			"name": "Player forward",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237672018,
+			"_type": "request"
+		},
+		{
+			"_id": "req_b3c268eb52af4817a27962502fbeb26a",
+			"parentId": "fld_764dcdb3a9544abe9960737df421bc4c",
+			"modified": 1489241841925,
+			"created": 1489238730010,
+			"url": "{{base_url}}video/player/stop",
+			"name": "Player stop",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237671968,
+			"_type": "request"
+		},
+		{
+			"_id": "req_44479418f35d4c238737f0aa67054d28",
+			"parentId": "fld_764dcdb3a9544abe9960737df421bc4c",
+			"modified": 1489241919407,
+			"created": 1489241908241,
+			"url": "{{base_url}}video/player/fastforward",
+			"name": "Player fast forward",
+			"method": "GET",
+			"body": {
+				"text": ""
+			},
+			"parameters": [],
+			"headers": [],
+			"authentication": {},
+			"metaSortKey": -1489237672017,
+			"_type": "request"
+		}
+	]
+}
