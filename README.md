@@ -6,19 +6,21 @@ _PiE_ stands for Pi Entertainment. It consists of several modules. _PiEPy_ is a 
 
 Python server runs on a Linux operating system (specifically it has been tested on _Ubuntu 16.04_ and on _Raspbian 8_, but it may run on any other recent Linux distribution as well).
 
-First of all you have to install _Python 3_ and an appropriate media player (either _VLC_ or _omxplayer_) if you do not have them already. Copy the contents of the folder `software/server_python` to a location of your choice and navigate to it in the _Terminal_. You will also need PIP to install the application's dependencies. To do that, just issue the following command (it is encouraged to create a separate _Virtual Environment_ first).
+First of all make sure you have Python 3 and pip installed along with an appropriate media player (either _VLC_ or _omxplayer_). Also install `pipenv` in case it is not installed already (`pip install --user pipenv`).
 
-    sudo pip3 install -r requirements.txt
+Copy the contents of the folder `src` to a location of your choice and navigate to it in the _Terminal_. Then run the following command.
+
+    pipenv update
 
 You can generate a configuration file by executing the server with the `-i` switch.
 
-    python main.py -i -c config.cfg
+    pipenv run python main.py -i -c config.cfg
 
-Take a look at the default configuration settings and edit them if you want. When you run the application, you can specify the location of the configuration file from the command line using the `-c` or `--config` arguments.
+Take a look at the default configuration settings and edit them if you want. When you run the application, you can specify the location of the configuration file from the command line using the `-c` or `--config` arguments. The default location of the configuration file is `config.cfg`.
 
-    python main.py -c config.cfg
+    pipenv run python main.py -c ../data/config.cfg
 
-The default location of the configuration file is `config.cfg`. Please note the following.
+Please note the following.
 
   * In case you are using _omxplayer_, you will need to run the server as the member of the _video_ group.
   * In case you are using _VLC_ or _feh_, will need to run the server as the user who started the X session.

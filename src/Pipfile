@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+
+[requires]
+python_version = "3.5"
+
+[packages]
+click = "==6.7"
+flask = "==0.12"
+itsdangerous = "==0.24"
+"jinja2" = "==2.9.5"
+markupsafe = "==1.0"
+pyparsing = "==2.2.0"
+requests = "==2.13.0"
+werkzeug = "==0.12.1"
+
+[dev-packages]
+
