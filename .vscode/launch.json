@@ -6,10 +6,10 @@
             "type": "python",
             "request": "launch",
             "stopOnEntry": true,
-            "program": "${workspaceRoot}/main.py",
-            "cwd": "${workspaceRoot}",
+            "program": "${workspaceRoot}/src/main.py",
+            "cwd": "${workspaceRoot}/src",
             "args": [
-				"--config=../config/config.cfg"
+				"--config=../data/config.cfg"
 			],
             "debugOptions": [
                 "WaitOnAbnormalExit",

@@ -25,7 +25,7 @@ class ServerManager(object):
     def start(self):
 
         self._current_process = subprocess.Popen(
-            ['python', self._executable_path, '-c', self._config_path],
+            ['pipenv', 'run', 'python', self._executable_path, '-c', self._config_path],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
