@@ -31,16 +31,15 @@ Please note the following.
 ## Development environment
 
   * OS
-    * Ubuntu 16.04
-    * Raspbian GNU/Linux 8 (jessie) raspberrypi 4.9.20-v7+
+    * Ubuntu 17.10
+    * Raspbian GNU/Linux 8 (jessie) raspberrypi 4.9.57-v7+
   * Python
-    * Python 3.5.2
+    * Python 3.6.3
     * Python PIP 9.0.1
-    * pylint 1.6.5
   * Media players
-    * VLC 2.2.2
-    * omxplayer build Tue, 10 Feb 2015 01:49:30 +0000
+    * VLC 2.2.6
+    * omxplayer 05 Jul 2017 17:40:39 UTC 5a25a57
   * Image viewers
-    * fbi 2.07, compiled on Dec 29 2013
-    * feh 2.9.3 Compile-time switches: curl exif xinerama
-    * xdotool 3.20140217.1
+    * fbi 2.09
+    * feh 2.19 Compile-time switches: curl exif xinerama
+    * xdotool 3.20160805.1
