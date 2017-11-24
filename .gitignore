@@ -2,9 +2,6 @@
 /data
 /src/testdata
 
-# Reports.
-/src/report_*
-
 # Python bytecode files.
 *.pyc
 
