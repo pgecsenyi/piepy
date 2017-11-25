@@ -58,7 +58,7 @@ class VideoDataDeleter(Deleter):
             missing_languages = []
             cursor.execute('SELECT id_language FROM video_file_language_mapping WHERE id_file=?', (video_id,))
             rows = cursor.fetchall()
-            if rows != None and len(rows) > 0:
+            if rows != None and rows:
                 missing_languages = [row[0] for row in rows]
 
             # Delete the specified video file and the corresponding language mappings.
@@ -75,7 +75,7 @@ class VideoDataDeleter(Deleter):
                 # If the deleted file was the only one from this quality for this title, then remove the mapping.
                 cursor.execute('SELECT id, id_quality FROM video_file WHERE id_title=?', (title_id,))
                 rows = cursor.fetchall()
-                if rows != None and len(rows) > 0:
+                if rows != None and rows:
                     available_qualities = [row[1] for row in rows]
                     missing_quality = self._delete_unavailable_quality(
                         cursor, title_id, missing_quality, available_qualities)
@@ -86,7 +86,7 @@ class VideoDataDeleter(Deleter):
                     'SELECT id_language FROM video_file_language_mapping WHERE id_file {}'.format(
                         self._build_in_clause([row[0] for row in rows])))
                 rows = cursor.fetchall()
-                if rows != None and len(rows) > 0:
+                if rows != None and rows:
                     available_languages = [row[0] for row in rows]
                     missing_languages = self._delete_unavailable_languages(
                         cursor, title_id, missing_languages, available_languages)
@@ -111,7 +111,7 @@ class VideoDataDeleter(Deleter):
                 self._build_in_clause(title_ids),
                 self._build_in_clause(missing_languages)))
         rows = cursor.fetchall()
-        if rows != None and len(rows) > 0:
+        if rows != None and rows:
             available_languages = [row[0] for row in rows]
             return self._subtract_lists(missing_languages, available_languages)
 
@@ -132,7 +132,7 @@ class VideoDataDeleter(Deleter):
     def _delete_l_q_mappings_recursively(self, cursor, title_id, missing_languages, missing_quality):
 
         # If there are no more stuff to delete, return.
-        if missing_quality is None and len(missing_languages) <= 0:
+        if missing_quality is None and not missing_languages:
             return
 
         # Get the title's parent and siblings.
@@ -148,9 +148,9 @@ class VideoDataDeleter(Deleter):
                 self._delete_quality_from_mapping(cursor, parent_id, missing_quality)
 
         # Check if the parent has the removed languages from other children.
-        if len(missing_languages) > 0:
+        if missing_languages:
             missing_languages = self._check_missing_languages(cursor, sibling_ids, missing_languages)
-            if len(missing_languages) > 0:
+            if missing_languages:
                 self._delete_languages_from_mapping(cursor, parent_id, missing_languages)
 
         self._delete_l_q_mappings_recursively(cursor, parent_id, missing_languages, missing_quality)
@@ -165,7 +165,7 @@ class VideoDataDeleter(Deleter):
     def _delete_title_recursively(self, cursor, title_id, missing_languages, missing_quality):
 
         # If there are no more stuff to delete, return.
-        if missing_quality is None and len(missing_languages) <= 0:
+        if missing_quality is None and not missing_languages:
             return
 
         # Get the title's parent first, we may need to delete that too.
@@ -183,7 +183,7 @@ class VideoDataDeleter(Deleter):
         sibling_ids = self._retrieve_title_children(cursor, parent_id)
 
         # In case the specified title was the only child of it's parent, then remove the parent.
-        if sibling_ids is None or len(sibling_ids) <= 0:
+        if sibling_ids is None or not sibling_ids:
 
             self._delete_title_recursively(cursor, parent_id, missing_languages, missing_quality)
 
@@ -191,7 +191,7 @@ class VideoDataDeleter(Deleter):
         else:
 
             missing_languages = self._check_missing_languages(cursor, sibling_ids, missing_languages)
-            if len(missing_languages) > 0:
+            if missing_languages:
                 self._delete_languages_from_mapping(cursor, parent_id, missing_languages)
 
             missing_quality = self._check_missing_quality(cursor, sibling_ids, missing_quality)
@@ -219,7 +219,7 @@ class VideoDataDeleter(Deleter):
         sibling_ids = self._retrieve_title_children(cursor, parent_id)
 
         # If this title is the only child, go see about it's parents.
-        if sibling_ids is None or len(sibling_ids) <= 0:
+        if sibling_ids is None or not sibling_ids:
 
             self._delete_sl_mappings_recursively(cursor, parent_id, language_id)
 
@@ -235,7 +235,7 @@ class VideoDataDeleter(Deleter):
             rows = cursor.fetchall()
 
             # If no siblings are present with this language, then go to the parent and remove the mappings there too.
-            if rows is None or len(rows) <= 0:
+            if rows is None or not rows:
                 self._delete_sl_mappings_recursively(cursor, parent_id, language_id)
 
     def _delete_quality_from_mapping(self, cursor, title_id, quality_id):
@@ -247,7 +247,7 @@ class VideoDataDeleter(Deleter):
     def _delete_unavailable_languages(self, cursor, title_id, missing_languages, available_languages):
 
         missing_languages = self._subtract_lists(missing_languages, available_languages)
-        if len(missing_languages) > 0:
+        if missing_languages:
             self._delete_languages_from_mapping(cursor, title_id, missing_languages)
 
         return missing_languages
@@ -264,7 +264,7 @@ class VideoDataDeleter(Deleter):
 
         cursor.execute('SELECT id FROM video_title WHERE id_parent=?', (title_id,))
         rows = cursor.fetchall()
-        if rows is None or len(rows) <= 0:
+        if rows is None or not rows:
             return None
 
         return [row[0] for row in rows]

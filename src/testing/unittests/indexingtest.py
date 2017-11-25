@@ -404,14 +404,14 @@ class TestCollector(Collector):
         self.collected_categorized_paths = []
         self.collected_uncategorized_paths = []
 
-    def collect_categorized(self, data):
+    def collect_categorized(self, categorized_nodes):
 
-        for item in data:
+        for item in categorized_nodes:
             self.collected_categorized_paths.append(item.path)
 
-    def collect_uncategorized(self, data):
+    def collect_uncategorized(self, uncategorized_nodes):
 
-        for item in data:
+        for item in uncategorized_nodes:
             self.collected_uncategorized_paths.append(item.path)
 
 class TestFilterFactory(PathFilterFactory):

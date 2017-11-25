@@ -142,8 +142,8 @@ def _get_status_string(status):
         return "not running"
     elif status == Catalogizer.STATUS_STARTED:
         return "started"
-    else:
-        return "unknown"
+
+    return "unknown"
 
 def _on_synchronization_finished(status):
 

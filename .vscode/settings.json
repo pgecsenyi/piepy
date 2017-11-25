@@ -1,5 +1,8 @@
 {
     "editor.tabSize": 4,
     "python.pythonPath": "~/.virtualenvs/src-00000000/bin/python",
+    "python.linting.pylintArgs": [
+        "--rcfile=${workspaceRoot}/src/.pylintrc"
+    ],
     "python.linting.pylintPath": "~/.virtualenvs/src-00000000/bin/pylint"
 }

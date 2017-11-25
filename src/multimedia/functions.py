@@ -28,7 +28,7 @@ def exit_process_send_keystroke(process, command):
     # Terminate process if it is still alive.
     return terminate_process(process)
 
-def popen_and_wait_for_exit(need_stdin, on_exit, on_process_started, *popen_arguments):
+def popen_and_wait_for_exit(need_stdin, on_exit, on_process_started, popen_arguments):
     """
     Runs the given args in a "subprocess.Popen()" and then calls the function "on_process_started()" when the process is
     started and "on_exit()" when the subprocess exists.
@@ -49,12 +49,12 @@ def popen_and_wait_for_exit(need_stdin, on_exit, on_process_started, *popen_argu
     def run():
         if need_stdin:
             process = subprocess.Popen(
-                *popen_arguments,
+                popen_arguments,
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE)
         else:
-            process = subprocess.Popen(*popen_arguments)
+            process = subprocess.Popen(popen_arguments)
         on_process_started(process)
         process.wait()
         on_exit()

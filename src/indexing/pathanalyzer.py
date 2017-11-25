@@ -62,7 +62,7 @@ class PathAnalyzer(object):
         """
 
         # No path to analyze. Nothing to do here.
-        if path is None or len(path) <= 0:
+        if path is None or not path:
             return
 
         # No collectible for this extension. Nothing to do here.
@@ -134,11 +134,11 @@ class PathAnalyzer(object):
 
         self._current_depth = self._current_depth - 1
 
-        if self._current_depth <= 0 and len(self._uncategorized_nodes) > 0:
+        if self._current_depth <= 0 and self._uncategorized_nodes:
             self._process_uncategorized_batch()
 
         if self._current_depth <= self._inflection_point:
-            if len(self._categorized_nodes) > 0:
+            if self._categorized_nodes:
                 self._process_batch()
             self._inflection_point = -1
 

@@ -4,15 +4,6 @@ from dal.retriever import Retriever
 class VideoDataRetriever(Retriever):
 
     ####################################################################################################################
-    # Constructor.
-    ####################################################################################################################
-
-    def __init__(self, db_context, cache):
-
-        ### Call base class constructor.
-        super(VideoDataRetriever, self).__init__(db_context, cache)
-
-    ####################################################################################################################
     # Public methods.
     ####################################################################################################################
 
@@ -42,7 +33,7 @@ class VideoDataRetriever(Retriever):
                 'WHERE f.id_title=? AND q.id=f.id_quality AND m.id_file=f.id',
                 (title_id,))
             rows = cursor.fetchall()
-            if rows is None or len(rows) <= 0:
+            if rows is None or not rows:
                 return None
 
             for row in rows:
@@ -57,7 +48,7 @@ class VideoDataRetriever(Retriever):
                     'WHERE s.id_file=? AND l.id=s.id_language',
                     (video_file['id'],))
                 rows = cursor.fetchall()
-                if rows != None and len(rows) > 0:
+                if rows != None and rows:
                     for row in rows:
                         result['subtitles'].append({'file' : video_file['id'], 'id' : row[0], 'language' : row[1]})
 

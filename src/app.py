@@ -13,6 +13,7 @@ import sys
 from flask import Flask
 
 from bll.mediacatalog.catalogizer import Catalogizer
+from bll.mediacatalog.catalogizercontext import CatalogizerContext
 from bll.player.audioplayeradapter import AudioPlayerAdapter
 from bll.player.videoplayeradapter import VideoPlayerAdapter
 from bll.playlist.playlistmanager import PlaylistManager
@@ -100,13 +101,14 @@ def configure_routing_image(image_dal):
 
 def configure_routing_maintenance(audio_dal, image_dal, video_dal):
 
-    indexing_config = create_indexer_configuration()
-    web.routing.maintenance.catalogizer = Catalogizer(
-        ConfigManager.settings.database,
-        indexing_config,
-        audio_dal,
-        image_dal,
-        video_dal)
+    catalogizer_context = CatalogizerContext()
+    catalogizer_context.database_config = ConfigManager.settings.database
+    catalogizer_context.indexing_config = create_indexer_configuration()
+    catalogizer_context.audio_dal = audio_dal
+    catalogizer_context.image_dal = image_dal
+    catalogizer_context.video_dal = video_dal
+
+    web.routing.maintenance.catalogizer = Catalogizer(catalogizer_context)
     web.routing.maintenance.status_info = StatusInfo(datetime.datetime.now(), audio_dal, image_dal, video_dal)
     web.routing.maintenance.video_dal_retriever = video_dal.retriever
 

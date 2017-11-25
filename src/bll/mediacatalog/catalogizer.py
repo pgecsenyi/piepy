@@ -34,26 +34,28 @@ class Catalogizer(object):
     # Constructor.
     ####################################################################################################################
 
-    def __init__(self, database_config, indexing_config, audio_dal, image_dal, video_dal):
+    def __init__(self, context):
 
         ### Validate parameters.
-        if database_config is None:
+        if context is None:
+            raise Exception('context cannot be None.')
+        if context.database_config is None:
             raise Exception('database_config cannot be None.')
-        if indexing_config is None:
+        if context.indexing_config is None:
             raise Exception('indexing_config cannot be None.')
-        if audio_dal is None:
+        if context.audio_dal is None:
             raise Exception('audio_dal cannot be None.')
-        if image_dal is None:
+        if context.image_dal is None:
             raise Exception('image_dal cannot be None.')
-        if video_dal is None:
+        if context.video_dal is None:
             raise Exception('video_dal cannot be None.')
 
         ### Attributes from outside.
-        self._database_config = database_config
-        self._indexing_config = indexing_config
-        self._audio_dal = audio_dal
-        self._image_dal = image_dal
-        self._video_dal = video_dal
+        self._database_config = context.database_config
+        self._indexing_config = context.indexing_config
+        self._audio_dal = context.audio_dal
+        self._image_dal = context.image_dal
+        self._video_dal = context.video_dal
 
         ### Private attributes.
         # A boolean value that indicates whether a synchronization process is running currently.

@@ -32,6 +32,6 @@ class VideoPlayerAdapter(PlayerAdapter):
 
         return self._video_dal_retriever.retrieve_video_path(file_id)
 
-    def _get_subtitle_by_id(self, subtitle_id):
+    def _get_subtitle_by_id(self, file_id):
 
-        return self._video_dal_retriever.retrieve_subtitle_path(subtitle_id)
+        return self._video_dal_retriever.retrieve_subtitle_path(file_id)
