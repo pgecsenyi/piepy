@@ -5,11 +5,12 @@
             "name": "Python",
             "type": "python",
             "request": "launch",
-            "stopOnEntry": true,
+            "stopOnEntry": false,
             "program": "${workspaceRoot}/src/main.py",
+            "pythonPath": "${config:python.pythonPath}",
             "cwd": "${workspaceRoot}/src",
             "args": [
-				"--config=../data/config.cfg"
+                "--config=../data/config.cfg"
 			],
             "debugOptions": [
                 "WaitOnAbnormalExit",

@@ -28,7 +28,24 @@ Please note the following.
   * _omxplayer_ is the recommended option when the server is running on _Raspberry Pi_, since it is much lighter on resources.
   * If you would like to use port 80, then you will have to run the server as root. Running the application as root is strongly discouraged however.
 
-## Development environment
+## Development
+
+Install developer dependencies first by running the following command.
+
+    pipenv update --dev
+
+There is a script called `run.sh` in the `src` folder. It accepts 2 parameters. The first parameter can have one of the following values.
+
+  * `clean`: removes Python bytecode files and the directory containing test data from the source folder.
+  * `lint`: runs pylint and generates output in the data folder provided as the second parameter.
+  * `test`: executes tests and generates output in the data folder provided as the second parameter.
+  * `start`: starts the application in debug mode loading the config file from the data folder provided as the second parameter.
+
+The second parameter tells the script where to store output files or load input from. It's default value is `../data`.
+
+_Visual Studio Code_ can be used to debug the application, in order to do that you will first need to configure the path of the Python interpreter in `.vscode/settings.json`.
+
+### Environment
 
   * OS
     * Ubuntu 17.10
@@ -43,3 +60,6 @@ Please note the following.
     * fbi 2.09
     * feh 2.19 Compile-time switches: curl exif xinerama
     * xdotool 3.20160805.1
+  * Code editor
+    * Visual Studio Code 1.18.0
+    * Python Visual Studio Code extensions 0.8.0
