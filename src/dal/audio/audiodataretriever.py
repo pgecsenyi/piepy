@@ -94,7 +94,7 @@ class AudioDataRetriever(Retriever):
                 where_clause = 'WHERE id_album=:id_album '
                 query_parameters = {'id_album' : album_id}
             cursor.execute(
-                'SELECT id, number, title FROM audio_file ' + where_clause + 'ORDER BY title',
+                'SELECT id, number, title FROM audio_file ' + where_clause + 'ORDER BY id_album, number',
                 query_parameters)
 
             result = build_result_dictionary(cursor, ['id', 'number', 'title'])
