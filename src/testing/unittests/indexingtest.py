@@ -296,6 +296,53 @@ class IndexingTest(unittest.TestCase):
             len(self._helper.files_path) + 1,
             'uncategorized')
 
+    def test_12_indexer_duplicates(self):
+
+        # Arrange.
+        tag_patterns = {
+            'episode_title' : '([^/]+)',
+            'language' : '([^/]+)',
+            'languages' : '([^/]+)',
+            'quality' : '([^/]+)',
+            'title' : '([^/]+)'}
+        tag_config = TagConfig('%', '%', ('any', '[^/]+'), tag_patterns)
+        path_pattern_analyzer = PathPatternAnalyzer()
+        video_pattern = path_pattern_analyzer.parse(
+            tag_config,
+            '%title%/Content/%quality%/%languages%/%any%/%episode_title%')
+        subtitle_pattern = path_pattern_analyzer.parse(
+            tag_config,
+            '%title%/Subtitle/%quality%/%languages%/%language%/%any%/%episode_title%')
+
+        collector = TestCollector()
+        collectibles = [
+            Collectible(['.avi', '.mp4'], video_pattern, 'video'),
+            Collectible(['.srt'], subtitle_pattern, 'subtitle')]
+        test_filter_factory = TestFilterFactory()
+
+        indexer_policy = IndexerPolicy(collector, collectibles, test_filter_factory)
+        indexer_policy.tag_any = 'any'
+
+        indexer = Indexer()
+        indexer.add_directory(self._helper.root_path)
+        indexer.add_directory(self._helper.root_path)
+        indexer.add_policy(indexer_policy)
+
+        # Act.
+        indexer.index()
+
+        # Assert.
+        self._compare_path_lists(
+            self._environment.fake_categorized_files,
+            collector.collected_categorized_paths,
+            len(self._helper.files_path) + 1,
+            'categorized')
+        self._compare_path_lists(
+            self._environment.fake_uncategorized_files,
+            collector.collected_uncategorized_paths,
+            len(self._helper.files_path) + 1,
+            'uncategorized')
+
     ####################################################################################################################
     # Auxiliary methods.
     ####################################################################################################################
@@ -356,24 +403,17 @@ class IndexingTest(unittest.TestCase):
     def _compare_path_lists(self, expected_paths, actual_paths, offset, name):
 
         name = name.upper()
-        processed_indices = []
 
+        actual_set = set()
         for actual_path in actual_paths:
+            actual_path = actual_path[offset:]
+            if actual_path in actual_set:
+                self.fail('There is at least one duplicate ({}) in the list {}.'.format(actual_path, name))
+            else:
+                actual_set.add(actual_path)
 
-            match = False
-            for i in range(0, len(expected_paths)):
-                if actual_path[offset:] == expected_paths[i]:
-                    self.assertNotIn(
-                        i,
-                        processed_indices,
-                        expected_paths[i] + ' is in the ' + name + ' list more than once.')
-                    processed_indices.append(i)
-                    match = True
-                    break
-
-            self.assertTrue(match, actual_path[offset:] + ' is not expected in ' + name + ' list.')
-
-        self.assertEqual(len(processed_indices), len(expected_paths), name + ' list is not complete.')
+        if any(e for e in expected_paths if e not in actual_set):
+            self.fail('There is at least one path missing from the list {}.'.format(name))
 
     def _compare_unordered_lists(self, expected_list, actual_list):
 
@@ -389,10 +429,10 @@ class IndexingTest(unittest.TestCase):
 
         for i in range(0, len(expected_list)):
             if expected_list[i] not in actual_list:
-                self.fail('Actual list does not contain the expected item: ' + expected_list[i] + '.')
+                self.fail('Actual list does not contain the expected item: {}.'.format(expected_list[i]))
         for i in range(0, len(actual_list)):
             if actual_list[i] not in expected_list:
-                self.fail('Actual list contains an unexpected item: ' + actual_list[i] + '.')
+                self.fail('Actual list contains an unexpected item: {}.'.format(actual_list[i]))
 
 ########################################################################################################################
 # Mocked classes.

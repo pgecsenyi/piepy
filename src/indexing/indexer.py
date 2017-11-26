@@ -45,7 +45,7 @@ class Indexer(object):
 
     def add_directory(self, directory):
         """
-        Registers a new directory to index.
+        Registers a new directory to index. Does nothing if the given directory is already added.
 
         Parameters
         ----------
@@ -53,7 +53,8 @@ class Indexer(object):
             The directory to be indexed.
         """
 
-        self._directories.append(directory)
+        if directory not in self._directories:
+            self._directories.append(directory)
 
     def add_policy(self, policy):
         """
