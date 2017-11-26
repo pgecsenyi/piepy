@@ -278,10 +278,11 @@ class IndexingTest(unittest.TestCase):
         indexer_policy.tag_any = 'any'
 
         indexer = Indexer()
+        indexer.add_directory(self._helper.root_path)
         indexer.add_policy(indexer_policy)
 
         # Act.
-        indexer.index(self._helper.root_path)
+        indexer.index()
 
         # Assert.
         self._compare_path_lists(

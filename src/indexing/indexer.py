@@ -72,26 +72,17 @@ class Indexer(object):
             if extension not in self._analyzers_by_extensions.keys():
                 self._analyzers_by_extensions[extension] = analyzer
 
-    def index(self, path=None):
+    def index(self):
         """
         Initializes filters, initiates indexing and after the indexing process has finished, cleans filters.
-
-        Parameters
-        ----------
-        path : str
-            The path to enumerate. If provided, the added directories will be ignored and only this path will be
-            indexed.
         """
 
         for analyzer in self._analyzers:
             analyzer.init_filters()
 
-        if path is None:
-            for directory in self._directories:
-                if os.path.exists(directory):
-                    self._scan_directory(directory)
-        elif os.path.exists(path):
-            self._scan_directory(path)
+        for directory in self._directories:
+            if os.path.exists(directory):
+                self._scan_directory(directory)
 
         for analyzer in self._analyzers:
             analyzer.clean_filters()
