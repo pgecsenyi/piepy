@@ -1,5 +1,8 @@
 {
     "editor.tabSize": 4,
+    "python.autoComplete.extraPaths": [
+        "${workspaceRoot}/src"
+    ],
     "python.pythonPath": "~/.virtualenvs/src-00000000/bin/python",
     "python.linting.pylintArgs": [
         "--rcfile=${workspaceRoot}/src/.pylintrc"
