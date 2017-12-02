@@ -1,3 +1,4 @@
+from flask import abort
 from flask import Blueprint
 from flask import jsonify
 from flask import request
@@ -52,9 +53,10 @@ def route_audio_tracks():
     Lists all available tracks.
     """
 
-    album_id = None
-    if (request.args != None) and ('album' in request.args):
-        album_id = request.args['album']
+    if request.args is None or 'album' not in request.args:
+        abort(400)
 
+    album_id = request.args['album']
     result = audio_dal_retriever.retrieve_tracks(album_id)
+
     return jsonify({'tracks' : result})

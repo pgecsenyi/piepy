@@ -36,13 +36,9 @@ Get audio albums for the given artist.
 
 Get audio artists.
 
-    GET /audio/tracks
-
-Get audio tracks.
-
     GET /audio/tracks?album=<int:album_id>
 
-Get audio albums for the given album.
+Get audio tracks from the given album.
 
     GET /audio/player/<string:action>
 
