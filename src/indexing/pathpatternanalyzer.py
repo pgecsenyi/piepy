@@ -208,8 +208,8 @@ class PathPatternAnalyzer(object):
         # In case the path does not have a fix point, it must not contain ANY tags.
         if not self._check_if_stable_path():
             raise Exception(
-                'In case the path contains don\'t cares, then it also has to have at least one fix point (a directory '
-                'with a well defined constant text).')
+                'In case the path contains at least one ANY tag, then it also has to have at least one fix point (a '
+                'directory with a well-defined constant text).')
 
         # Check that there are no two tags next to each other anywhere in the path.
         is_after_tag = False

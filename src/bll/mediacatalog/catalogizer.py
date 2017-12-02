@@ -1,5 +1,6 @@
 from datetime import datetime
 from os import path, unlink
+import logging
 import threading
 
 from dal.configuration.tags import AUDIO_TAG_PATTERNS, IMAGE_TAG_PATTERNS, SUBTITLE_TAG_PATTERNS, TAG_ANY, \
@@ -80,7 +81,10 @@ class Catalogizer(object):
     def rebuild_database(self):
 
         with self._synchronization_lock_object:
-            return self._rebuild_database()
+            try:
+                return self._rebuild_database()
+            except Exception as exception:
+                logging.error('Failed to rebuild media database. %s', exception)
 
     def rebuild_database_async(self, callback=None):
 
@@ -111,7 +115,10 @@ class Catalogizer(object):
     def synchronize_database(self):
 
         with self._synchronization_lock_object:
-            return self._synchronize_database()
+            try:
+                return self._synchronize_database()
+            except Exception as exception:
+                logging.error('Failed to synchronize media database. %s', exception)
 
     def synchronize_database_async(self, callback=None):
 
@@ -120,6 +127,15 @@ class Catalogizer(object):
     ####################################################################################################################
     # Private methods -- Indexing.
     ####################################################################################################################
+
+    def _index_all_files(self):
+
+        with self._audio_dal.db_context.get_connection_provider():
+            self._index_audio_files()
+        with self._image_dal.db_context.get_connection_provider():
+            self._index_image_files()
+        with self._video_dal.db_context.get_connection_provider():
+            self._index_video_files()
 
     def _index_audio_files(self, sync_only=False):
 
@@ -212,6 +228,23 @@ class Catalogizer(object):
     # Private methods -- Database manipulation.
     ####################################################################################################################
 
+    def _clear_caches(self):
+
+        self._audio_dal.clear_cache()
+        self._image_dal.clear_cache()
+        self._video_dal.clear_cache()
+
+    def _create_database(self):
+
+        self._audio_dal.creator.create_db()
+        self._image_dal.creator.create_db()
+        self._video_dal.creator.create_db()
+
+    def _delete_database(self):
+
+        if path.exists(self._database_config.path_media) is True:
+            unlink(self._database_config.path_media)
+
     def _rebuild_database(self):
 
         if self._is_process_running:
@@ -219,24 +252,13 @@ class Catalogizer(object):
 
         self._is_process_running = True
 
-        if path.exists(self._database_config.path_media) is True:
-            unlink(self._database_config.path_media)
-
-        self._audio_dal.clear_cache()
-        self._image_dal.clear_cache()
-        self._video_dal.clear_cache()
-        self._audio_dal.creator.create_db()
-        self._image_dal.creator.create_db()
-        self._video_dal.creator.create_db()
-
-        with self._audio_dal.db_context.get_connection_provider():
-            self._index_audio_files()
-        with self._image_dal.db_context.get_connection_provider():
-            self._index_image_files()
-        with self._video_dal.db_context.get_connection_provider():
-            self._index_video_files()
-
-        self._is_process_running = False
+        try:
+            self._delete_database()
+            self._clear_caches()
+            self._create_database()
+            self._index_all_files()
+        finally:
+            self._is_process_running = False
 
         return Catalogizer.STATUS_COMPLETED
 
@@ -247,11 +269,12 @@ class Catalogizer(object):
 
         self._is_process_running = True
 
-        self._index_audio_files(True)
-        self._index_image_files(True)
-        self._index_video_files(True)
-
-        self._is_process_running = False
+        try:
+            self._index_audio_files(True)
+            self._index_image_files(True)
+            self._index_video_files(True)
+        finally:
+            self._is_process_running = False
 
         return Catalogizer.STATUS_COMPLETED
 
@@ -274,6 +297,6 @@ class Catalogizer(object):
             thread = threading.Thread(target=self._execute_function, args=(func, callback))
             thread.start()
         except Exception as exception:
-            print(exception)
+            logging.error('Failed to execute asynchronous operation. %s', exception)
 
         return Catalogizer.STATUS_STARTED
