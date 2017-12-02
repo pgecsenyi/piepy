@@ -44,19 +44,21 @@ class Catalogizer(object):
             raise Exception('database_config cannot be None.')
         if context.indexing_config is None:
             raise Exception('indexing_config cannot be None.')
-        if context.audio_dal is None:
-            raise Exception('audio_dal cannot be None.')
-        if context.image_dal is None:
-            raise Exception('image_dal cannot be None.')
-        if context.video_dal is None:
-            raise Exception('video_dal cannot be None.')
+        if context.media_dal is None:
+            raise Exception('media_dal cannot be None.')
+        if context.media_dal.audio_data_handler is None:
+            raise Exception('audio_data_handler cannot be None.')
+        if context.media_dal.image_data_handler is None:
+            raise Exception('image_data_handler cannot be None.')
+        if context.media_dal.video_data_handler is None:
+            raise Exception('video_data_handler cannot be None.')
 
         ### Attributes from outside.
         self._database_config = context.database_config
         self._indexing_config = context.indexing_config
-        self._audio_dal = context.audio_dal
-        self._image_dal = context.image_dal
-        self._video_dal = context.video_dal
+        self._audio_dal = context.media_dal.audio_data_handler
+        self._image_dal = context.media_dal.image_data_handler
+        self._video_dal = context.media_dal.video_data_handler
 
         ### Private attributes.
         # A boolean value that indicates whether a synchronization process is running currently.
