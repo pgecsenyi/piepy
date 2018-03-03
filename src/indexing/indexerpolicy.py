@@ -30,20 +30,15 @@ class IndexerPolicy(object):
 
         ### Attributes from outside.
         self._collector = collector
+        self._filter_factory = filter_factory
 
         ### Private attributes.
         # The filters to be used during the indexing process.
         self._filters = None
         # The name of the any tag that can match anything in the path. Includes separators.
         self._tag_any = None
-
         # A dictionary that stores collectibles by extensions.
-        self._collectibles = {}
-        for collectible in collectibles:
-            for extension in collectible.extensions:
-                self._collectibles[extension] = collectible
-
-        self._filter_factory = filter_factory
+        self._collectibles = self._group_collectibles_by_extensions(collectibles)
 
     ####################################################################################################################
     # Properties.
@@ -114,3 +109,16 @@ class IndexerPolicy(object):
             return None
 
         return self._collectibles[extension]
+
+    ####################################################################################################################
+    # Private methods.
+    ####################################################################################################################
+
+    def _group_collectibles_by_extensions(self, flat_collectibles):
+
+        collectibles = {}
+        for collectible in flat_collectibles:
+            for extension in collectible.extensions:
+                collectibles[extension] = collectible
+
+        return collectibles

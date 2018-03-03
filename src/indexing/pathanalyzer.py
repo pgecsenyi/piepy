@@ -2,9 +2,8 @@ from indexing.nodes import CategorizedNode, UncategorizedNode
 
 class PathAnalyzer(object):
     """
-    Analyzes paths. Matches the given pattern on the given files, collecting the ones that match the pattern and the
-    ones that do not separately. Forwards the collected data to the Collector in batches when all the necessary
-    information become available.
+    Matches the given pattern against the given path, separating paths that match the pattern from those that do not.
+    Forwards the collected data to the Collector in batches when all the necessary information become available.
     """
 
     ####################################################################################################################

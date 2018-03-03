@@ -3,7 +3,7 @@ import re
 class PathPattern(object):
     """
     Stores a preprocessed regular expression describing a path as well as a mapping that matches the groups in that
-    expression with the appropriate tags. Also stores the length of the path not counting the any tags in it.
+    expression to the appropriate tags. Also stores the length of the path, ignoring ANY tags.
     """
 
     ####################################################################################################################
