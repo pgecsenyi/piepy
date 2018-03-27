@@ -34,6 +34,8 @@ if [ $action = "lint" ]; then
     pipenv run pylint --rcfile=.pylintrc app bll dal indexing multimedia testing web > "${report_lint_path}"
 elif [ $action = "test" ]; then
     echo 'TEST RESULTS\n============' > "${report_test_path}"
+    echo '\n\nConfiguration Data Access Layer\n---------------------\n' >> "${report_test_path}"
+    pipenv run python -m unittest -v testing.unittests.configmanagertest 2>> "${report_test_path}"
     echo '\n\nPlaylist Data Access Layer\n---------------------\n' >> "${report_test_path}"
     pipenv run python -m unittest -v testing.unittests.playlistdaltest 2>> "${report_test_path}"
     echo '\n\nVideo Data Access Layer\n-----------------------\n' >> "${report_test_path}"

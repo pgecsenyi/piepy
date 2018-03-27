@@ -62,4 +62,4 @@ _Visual Studio Code_ can be used to debug the application, in order to do that y
     * xdotool 3.20160805.1
   * Code editor
     * Visual Studio Code 1.19.3
-      * Extension: Python 2018.1.0
+      * Extension: Python 2018.2.1
