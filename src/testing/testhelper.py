@@ -1,5 +1,6 @@
 import os
 import shutil
+import sys
 
 from dal.configuration.config import Config
 from dal.configuration.configmanager import ConfigManager
@@ -15,15 +16,14 @@ class TestHelper(object):
         ### Public attributes.
         self.test_service_base_url = 'http://localhost:8096/'
 
-        ### Private attributes.
         # The path of the test files, database and so on.
         self._environments = []
+        self._test_root_directory = self._determine_root_directory()
         self._test_paths = {
-            'config' : 'testdata/test.cfg',
-            'database_media' : 'testdata/media.db',
-            'database_playlist' : 'testdata/playlist.db',
-            'files' : 'testdata/fakefiles',
-            'root' : 'testdata'}
+            'config' : os.path.join(self._test_root_directory, 'test.cfg'),
+            'database_media' : os.path.join(self._test_root_directory, 'media.db'),
+            'database_playlist' : os.path.join(self._test_root_directory, 'playlist.db'),
+            'files' : os.path.join(self._test_root_directory, 'fakefiles')}
 
     ####################################################################################################################
     # Properties.
@@ -47,7 +47,7 @@ class TestHelper(object):
 
     @property
     def root_path(self):
-        return self._test_paths['root']
+        return self._test_root_directory
 
     ####################################################################################################################
     # Public methods.
@@ -69,8 +69,8 @@ class TestHelper(object):
     def clean(self):
 
         try:
-            if os.path.exists(self._test_paths['root']):
-                shutil.rmtree(self._test_paths['root'])
+            if os.path.exists(self._test_root_directory):
+                shutil.rmtree(self._test_root_directory)
         except OSError as exception:
             print('Error: {0} - {1}.'.format(exception.filename, exception.strerror))
 
@@ -131,5 +131,20 @@ class TestHelper(object):
 
     def create_root_path(self):
 
-        if not os.path.exists(self._test_paths['root']):
-            os.makedirs(self._test_paths['root'])
+        if not os.path.exists(self._test_root_directory):
+            os.makedirs(self._test_root_directory)
+
+    ####################################################################################################################
+    # Auxiliary methods.
+    ####################################################################################################################
+
+    def _determine_root_directory(self):
+
+        params = sys.argv
+        param_count = len(params)
+
+        for i in range(param_count):
+            if params[i] == '-p' and param_count >= i + 1:
+                return params[i + 1]
+
+        return 'testdata'
