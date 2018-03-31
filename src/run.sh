@@ -26,7 +26,7 @@ if [ $# -ge 2 ]; then
     data_path=$2
 fi
 
-config_path="${data_path}/config.cfg"
+config_path="${data_path}/config.json"
 report_lint_path="${data_path}/report_code_quality.txt"
 report_test_path="${data_path}/report_testing.txt"
 

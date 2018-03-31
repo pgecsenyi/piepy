@@ -20,7 +20,7 @@ class TestHelper(object):
         self._environments = []
         self._test_root_directory = self._determine_root_directory()
         self._test_paths = {
-            'config' : os.path.join(self._test_root_directory, 'test.cfg'),
+            'config' : os.path.join(self._test_root_directory, 'test.json'),
             'database_media' : os.path.join(self._test_root_directory, 'media.db'),
             'database_playlist' : os.path.join(self._test_root_directory, 'playlist.db'),
             'files' : os.path.join(self._test_root_directory, 'fakefiles')}

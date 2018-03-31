@@ -3,9 +3,9 @@
     "python.autoComplete.extraPaths": [
         "${workspaceRoot}/src"
     ],
-    "python.pythonPath": "~/.virtualenvs/src-00000000/bin/python",
+    "python.pythonPath": "~/.virtualenvs/src-DtSqLVN3/bin/python",
     "python.linting.pylintArgs": [
         "--rcfile=${workspaceRoot}/src/.pylintrc"
     ],
-    "python.linting.pylintPath": "~/.virtualenvs/src-00000000/bin/pylint"
+    "python.linting.pylintPath": "~/.virtualenvs/src-DtSqLVN3/bin/pylint"
 }

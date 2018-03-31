@@ -4,7 +4,7 @@ ConfigManager
 Logic for managing application configuration.
 """
 
-import configparser
+import json
 import os
 
 from dal.configuration.config import Config
@@ -37,16 +37,19 @@ class ConfigManager(object):
             The path of the configuration file to load the settings from.
         """
 
-        # Check if the given file exists.
         if not os.path.exists(config_file_path):
             raise Exception('The configuration file ({0}) does not exist.'.format(config_file_path))
 
-        # Parse the configuration file.
-        config_parser = configparser.RawConfigParser()
-        config_parser.read(config_file_path)
+        try:
+            json_config = ''
+            with open(config_file_path, 'r') as config_file:
+                json_config = json.load(config_file)
 
-        # Load settings.
-        ConfigManager.settings = ConfigManager._load_config_from_parser(config_parser)
+            ConfigManager.settings = ConfigManager._parse_json_config(json_config)
+        except KeyError as missing_key:
+            raise Exception('Cannot parse configuration file, key {} is missing.'.format(missing_key))
+        except Exception as exception:
+            raise Exception('Cannot parse configuration file. {}'.format(exception))
 
     @staticmethod
     def save(config_file_path, config=None):
@@ -65,29 +68,91 @@ class ConfigManager(object):
         if config is None:
             config = ConfigManager.settings
 
-        # Instantiate configuration parser.
-        config_parser = configparser.RawConfigParser()
+        try:
+            json_config = ConfigManager._create_json_config(config)
 
-        # Set values.
-        ConfigManager._save_config_to_parser(config_parser, config)
-
-        # Store settings.
-        with open(config_file_path, 'w') as config_file:
-            config_parser.write(config_file)
+            with open(config_file_path, 'w') as config_file:
+                json.dump(json_config, config_file, indent=2, sort_keys=True)
+        except Exception as exception:
+            raise Exception('Cannot save configuration file. {}'.format(exception))
 
     ####################################################################################################################
     # Private methods -- Load and save.
     ####################################################################################################################
 
     @staticmethod
-    def _load_config_from_parser(config_parser):
+    def _create_json_config(config):
         """
-        Creates a Config object and inflates it from the given ConfigParser.
+        Converts the configuration to a plain Python object using dictionaries and built-in structures.
 
         Parameters
         ----------
-        config_parser : ConfigParser
-            The configuration parser used to read the settings.
+        config : Config
+            The configuration to save.
+
+        Returns
+        -------
+        A plain Python object that can be used for JSON serialization.
+        """
+
+        json_config = {}
+
+        # Database.
+        json_config['database'] = {}
+        json_config['database']['lifetime'] = config.database.lifetime
+        json_config['database']['path_media'] = config.database.path_media
+        json_config['database']['path_playlist'] = config.database.path_playlist
+
+        # Indexing.
+        json_config['indexing'] = {}
+
+        json_config['indexing']['audio'] = {}
+        json_config['indexing']['audio']['extensions'] = config.indexing.audio.extensions
+        json_config['indexing']['audio']['paths'] = config.indexing.audio.path
+        json_config['indexing']['audio']['pattern'] = config.indexing.audio.pattern
+
+        json_config['indexing']['image'] = {}
+        json_config['indexing']['image']['extensions'] = config.indexing.image.extensions
+        json_config['indexing']['image']['paths'] = config.indexing.image.path
+        json_config['indexing']['image']['pattern'] = config.indexing.image.pattern
+
+        json_config['indexing']['video'] = {}
+        json_config['indexing']['video']['ignore_revisions'] = config.indexing.video.ignore_revisions
+        json_config['indexing']['video']['paths'] = config.indexing.video.path
+        json_config['indexing']['video']['subtitle_extensions'] = config.indexing.video.subtitle_extensions
+        json_config['indexing']['video']['subtitle_pattern'] = config.indexing.video.subtitle_pattern
+        json_config['indexing']['video']['video_extensions'] = config.indexing.video.extensions
+        json_config['indexing']['video']['video_pattern'] = config.indexing.video.video_pattern
+
+        # Logging.
+        json_config['logging'] = {}
+        json_config['logging']['enabled'] = config.logging.enabled
+        json_config['logging']['level'] = config.logging.level
+        json_config['logging']['max_size_bytes'] = config.logging.max_size_bytes
+        json_config['logging']['path'] = config.logging.path
+
+        # Multimedia.
+        json_config['multimedia'] = {}
+        json_config['multimedia']['av_player'] = config.multimedia.av_player
+        json_config['multimedia']['av_player_path'] = config.multimedia.av_player_path
+        json_config['multimedia']['image_viewer'] = config.multimedia.image_viewer
+        json_config['multimedia']['image_viewer_path'] = config.multimedia.image_viewer_path
+
+        # Web.
+        json_config['web'] = {}
+        json_config['web']['port'] = config.web.port
+
+        return json_config
+
+    @staticmethod
+    def _parse_json_config(json_config):
+        """
+        Creates a Config object from a plain Python object.
+
+        Parameters
+        ----------
+        json_config : object
+            The configuration containing the settings.
 
         Returns
         -------
@@ -97,176 +162,55 @@ class ConfigManager(object):
         config = Config()
 
         # Database.
-        config.database.lifetime = config_parser.getint('database', 'lifetime')
-        config.database.path_media = config_parser.get('database', 'path_media')
-        config.database.path_playlist = config_parser.get('database', 'path_playlist')
+        config.database.lifetime = json_config['database']['lifetime']
+        config.database.path_media = json_config['database']['path_media']
+        config.database.path_playlist = json_config['database']['path_playlist']
 
         # Indexing.
-        if config_parser.has_section('indexing_audio'):
+        if 'indexing' in json_config:
 
-            config.indexing.audio.extensions = config_parser.get('indexing_audio', 'extensions').split(',')
-            config.indexing.audio.path = ConfigManager._list_from_string(config_parser.get('indexing_audio', 'path'))
-            config.indexing.audio.pattern = config_parser.get('indexing_audio', 'pattern')
+            if 'audio' in json_config['indexing']:
 
-            ConfigManager.categories.append('audio')
+                config.indexing.audio.extensions = json_config['indexing']['audio']['extensions']
+                config.indexing.audio.path = json_config['indexing']['audio']['paths']
+                config.indexing.audio.pattern = json_config['indexing']['audio']['pattern']
 
-        if config_parser.has_section('indexing_image'):
+                ConfigManager.categories.append('audio')
 
-            config.indexing.image.extensions = config_parser.get('indexing_image', 'extensions').split(',')
-            config.indexing.image.path = ConfigManager._list_from_string(config_parser.get('indexing_image', 'path'))
-            config.indexing.image.pattern = config_parser.get('indexing_image', 'pattern')
+            if 'image' in json_config['indexing']:
 
-            ConfigManager.categories.append('image')
+                config.indexing.image.extensions = json_config['indexing']['image']['extensions']
+                config.indexing.image.path = json_config['indexing']['image']['paths']
+                config.indexing.image.pattern = json_config['indexing']['image']['pattern']
 
-        if config_parser.has_section('indexing_video'):
+                ConfigManager.categories.append('image')
 
-            config.indexing.video.ignore_revisions = config_parser.getboolean('indexing_video', 'ignore_revisions')
-            config.indexing.video.extensions = config_parser.get('indexing_video', 'video_extensions').split(',')
-            config.indexing.video.path = ConfigManager._list_from_string(config_parser.get('indexing_video', 'path'))
-            config.indexing.video.subtitle_extensions = config_parser \
-                .get('indexing_video', 'subtitle_extensions') \
-                .split(',')
-            config.indexing.video.subtitle_pattern = config_parser.get('indexing_video', 'subtitle_pattern')
-            config.indexing.video.video_pattern = config_parser.get('indexing_video', 'video_pattern')
+            if 'video' in json_config['indexing']:
 
-            ConfigManager.categories.append('video')
+                config.indexing.video.ignore_revisions = json_config['indexing']['video']['ignore_revisions']
+                config.indexing.video.extensions = json_config['indexing']['video']['video_extensions']
+                config.indexing.video.path = json_config['indexing']['video']['paths']
+                config.indexing.video.subtitle_extensions = json_config['indexing']['video']['subtitle_extensions']
+                config.indexing.video.subtitle_pattern = json_config['indexing']['video']['subtitle_pattern']
+                config.indexing.video.video_pattern = json_config['indexing']['video']['video_pattern']
+
+                ConfigManager.categories.append('video')
 
         # Logging.
-        if config_parser.has_section('logging'):
+        if 'logging' in json_config:
 
-            config.logging.enabled = config_parser.getboolean('logging', 'enabled')
-            config.logging.level = config_parser.get('logging', 'level')
-            config.logging.max_size_bytes = config_parser.getint('logging', 'max_size_bytes')
-            config.logging.path = config_parser.get('logging', 'path')
+            config.logging.enabled = json_config['logging']['enabled']
+            config.logging.level = json_config['logging']['level']
+            config.logging.max_size_bytes = json_config['logging']['max_size_bytes']
+            config.logging.path = json_config['logging']['path']
 
         # Multimedia.
-        config.multimedia.av_player = config_parser.get('multimedia', 'av_player')
-        config.multimedia.av_player_path = config_parser.get('multimedia', 'av_player_path')
-        config.multimedia.image_viewer = config_parser.get('multimedia', 'image_viewer')
-        config.multimedia.image_viewer_path = config_parser.get('multimedia', 'image_viewer_path')
+        config.multimedia.av_player = json_config['multimedia']['av_player']
+        config.multimedia.av_player_path = json_config['multimedia']['av_player_path']
+        config.multimedia.image_viewer = json_config['multimedia']['image_viewer']
+        config.multimedia.image_viewer_path = json_config['multimedia']['image_viewer_path']
 
         # Web.
-        config.web.port = config_parser.getint('web', 'port')
+        config.web.port = json_config['web']['port']
 
         return config
-
-    @staticmethod
-    def _save_config_to_parser(config_parser, config):
-        """
-        Saves configuration to the given ConfigParser.
-
-        Parameters
-        ----------
-        config_parser : ConfigParser
-            The configuration parser used to store the settings.
-        config : Config
-            The configuration to save.
-        """
-
-        # Database.
-        config_parser.add_section('database')
-        config_parser.set('database', 'lifetime', str(config.database.lifetime))
-        config_parser.set('database', 'path_media', config.database.path_media)
-        config_parser.set('database', 'path_playlist', config.database.path_playlist)
-
-        # Indexing.
-        config_parser.add_section('indexing_audio')
-        config_parser.set('indexing_audio', 'extensions', ','.join(config.indexing.audio.extensions))
-        config_parser.set('indexing_audio', 'path', ConfigManager._list_to_string(config.indexing.audio.path))
-        config_parser.set('indexing_audio', 'pattern', config.indexing.audio.pattern)
-
-        config_parser.add_section('indexing_image')
-        config_parser.set('indexing_image', 'extensions', ','.join(config.indexing.image.extensions))
-        config_parser.set('indexing_image', 'path', ConfigManager._list_to_string(config.indexing.image.path))
-        config_parser.set('indexing_image', 'pattern', config.indexing.image.pattern)
-
-        config_parser.add_section('indexing_video')
-        config_parser.set('indexing_video', 'ignore_revisions', config.indexing.video.ignore_revisions)
-        config_parser.set('indexing_video', 'path', ConfigManager._list_to_string(config.indexing.video.path))
-        config_parser.set('indexing_video', 'subtitle_extensions', ','.join(config.indexing.video.subtitle_extensions))
-        config_parser.set('indexing_video', 'subtitle_pattern', config.indexing.video.subtitle_pattern)
-        config_parser.set('indexing_video', 'video_extensions', ','.join(config.indexing.video.extensions))
-        config_parser.set('indexing_video', 'video_pattern', config.indexing.video.video_pattern)
-
-        # Logging.
-        config_parser.add_section('logging')
-        config_parser.set('logging', 'enabled', config.logging.enabled)
-        config_parser.set('logging', 'level', config.logging.level)
-        config_parser.set('logging', 'max_size_bytes', config.logging.max_size_bytes)
-        config_parser.set('logging', 'path', config.logging.path)
-
-        # Multimedia.
-        config_parser.add_section('multimedia')
-        config_parser.set('multimedia', 'av_player', config.multimedia.av_player)
-        config_parser.set('multimedia', 'av_player_path', config.multimedia.av_player_path)
-        config_parser.set('multimedia', 'image_viewer', config.multimedia.image_viewer)
-        config_parser.set('multimedia', 'image_viewer_path', config.multimedia.image_viewer_path)
-
-        # Web.
-        config_parser.add_section('web')
-        config_parser.set('web', 'port', config.web.port)
-
-    ####################################################################################################################
-    # Private methods -- Parse.
-    ####################################################################################################################
-
-    @staticmethod
-    def _contains_space_comma(value):
-
-        for i in range(0, len(value)):
-            if value[i].isspace() or value[i] == ',':
-                return True
-
-        return False
-
-    @staticmethod
-    def _list_from_string(value):
-
-        result = []
-
-        current = ''
-        in_quote = False
-        for i in range(0, len(value)):
-            if in_quote:
-                if value[i] == '\'' or value[i] == '"':
-                    result.append(current)
-                    current = ''
-                    in_quote = False
-                else:
-                    current = current + value[i]
-            else:
-                if value[i] == '\'' or value[i] == '"':
-                    if current == '':
-                        in_quote = True
-                    else:
-                        raise Exception('Invalid configuration: malformed list.')
-                elif value[i] == ',':
-                    if current != '':
-                        result.append(current)
-                        current = ''
-                else:
-                    current = current + value[i]
-
-        if current != '':
-            result.append(current)
-
-        return result
-
-    @staticmethod
-    def _list_to_string(list_to_convert):
-
-        last_index = len(list_to_convert) - 1
-        result = ''
-
-        for i in range(0, last_index):
-            if ConfigManager._contains_space_comma(list_to_convert[i]):
-                result = result + '\'' + list_to_convert[i] + '\','
-            else:
-                result = result + list_to_convert[i] + ','
-
-        if ConfigManager._contains_space_comma(list_to_convert[last_index]):
-            result = result + '\'' + list_to_convert[last_index] + '\''
-        else:
-            result = result + list_to_convert[last_index]
-
-        return result

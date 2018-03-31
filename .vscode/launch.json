@@ -10,7 +10,7 @@
             "pythonPath": "${config:python.pythonPath}",
             "cwd": "${workspaceRoot}/src",
             "args": [
-                "--config=../data/config.cfg"
+                "--config=../data/config.json"
 			],
             "debugOptions": [
                 "WaitOnAbnormalExit",

@@ -30,7 +30,7 @@ class ArgumentParser(object):
         self._application_name = ''
         self._arguments = sys.argv
         self._config_file_path = None
-        self._default_config_file_path = 'config.cfg'
+        self._default_config_file_path = 'config.json'
         self._is_debugging_enabled = False
         self._log_file_path = None
 

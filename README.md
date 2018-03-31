@@ -14,11 +14,11 @@ Copy the contents of the folder `src` to a location of your choice and navigate 
 
 You can generate a configuration file by executing the server with the `-i` switch.
 
-    pipenv run python main.py -i -c config.cfg
+    pipenv run python main.py -i -c config.json
 
-Take a look at the default configuration settings and edit them if you want. When you run the application, you can specify the location of the configuration file from the command line using the `-c` or `--config` arguments. The default location of the configuration file is `config.cfg`.
+Take a look at the default configuration settings and edit them if you want. When you run the application, you can specify the location of the configuration file from the command line using the `-c` or `--config` arguments. The default location of the configuration file is `config.json`.
 
-    pipenv run python main.py -c ../data/config.cfg
+    pipenv run python main.py -c ../data/config.json
 
 Please note the following.
 
