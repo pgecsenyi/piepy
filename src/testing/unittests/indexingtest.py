@@ -16,6 +16,7 @@ from indexing.nodes import CategorizedNode, UncategorizedNode
 from indexing.pathanalyzer import PathAnalyzer
 from indexing.pathpattern import PathPattern
 from indexing.pathpatternanalyzer import PathPatternAnalyzer
+from indexing.pathpatternpreprocessor import PathPatternPreprocessor
 from indexing.tagconfig import TagConfig
 from testing.testhelper import TestHelper
 from testing.videotestenvironment import VideoTestEnvironment
@@ -69,7 +70,52 @@ class IndexingTest(unittest.TestCase):
         self.assertEqual('something', tag_config.tag_any, 'The ANY tag is incorrect.')
         self._compare_dictionaries(tag_config.tag_patterns, {'tag1' : '.*', 'tag2' : '[0-9]+'})
 
-    def test_03_pathpatternanalyzer_validate(self):
+    def test_03_pathpatternpreprocessor_1(self):
+
+        # Arrange.
+        tag_patterns = {
+            'languages' : '([^/]+)',
+            'quality' : '([^/]+)',
+            'title' : '([^/]+)'}
+        tag_config = TagConfig('%', '%', ('dontcare', '[^/]+'), tag_patterns)
+
+        # Act.
+        path_pattern_preprocessor = PathPatternPreprocessor()
+        path_pattern_preprocessor.process(
+            tag_config,
+            '%title%/Content/%quality%/%languages%/%dontcare%')
+
+        # Assert.
+        self.assertEqual(
+            '%title%/Content/%quality%/%languages%/%dontcare%',
+            path_pattern_preprocessor.path_pattern_string,
+            'Path pattern string has been changed illegally.')
+        self.assertEqual(4, path_pattern_preprocessor.length_without_any_tags, 'Invalid group length.')
+
+    def test_04_pathpatternpreprocessor_2(self):
+
+        # Arrange.
+        tag_patterns = {
+            'episode_title' : '([^/]+)',
+            'languages' : '([^/]+)',
+            'quality' : '([^/]+)',
+            'title' : '([^/]+)'}
+        tag_config = TagConfig('%', '%', ('dontcare', '[^/]+'), tag_patterns)
+
+        # Act.
+        path_pattern_preprocessor = PathPatternPreprocessor()
+        path_pattern_preprocessor.process(
+            tag_config,
+            '%title%/Content/%quality%/%languages%/%dontcare%/%episode_title%')
+
+        # Assert.
+        self.assertEqual(
+            '%title%/Content/%quality%/%languages%/%dontcare%/%episode_title%',
+            path_pattern_preprocessor.path_pattern_string,
+            'Path pattern string has been changed illegally.')
+        self.assertEqual(5, path_pattern_preprocessor.length_without_any_tags, 'Invalid group length.')
+
+    def test_05_pathpatternanalyzer_1(self):
 
         # Arrange.
         tag_patterns_1 = {
@@ -99,18 +145,18 @@ class IndexingTest(unittest.TestCase):
             tag_config_2,
             '%title%/%quality%/%languages%/%any%')
 
-    def test_04_pathpatternanalyzer_anal_1(self):
+    def test_06_pathpatternanalyzer_2(self):
 
         # Arrange.
         tag_patterns = {
             'languages' : '([^/]+)',
             'quality' : '([^/]+)',
             'title' : '([^/]+)'}
-        tag_config = TagConfig('%', '%', ('dontcare', '[^/]+'), tag_patterns)
+        tag_config = TagConfig('%', '%', ('any', '[^/]+'), tag_patterns)
         path_pattern_analyzer = PathPatternAnalyzer()
 
         # Act.
-        path_pattern = path_pattern_analyzer.parse(tag_config, '%title%/Content/%quality%/%languages%/%dontcare%')
+        path_pattern = path_pattern_analyzer.parse(tag_config, '%title%/Content/%quality%/%languages%/%any%')
 
         # Assert.
         self.assertEqual(
@@ -118,11 +164,11 @@ class IndexingTest(unittest.TestCase):
             path_pattern.path_pattern_regexp.pattern,
             'The built pattern not equals with the expected one.')
         self._compare_lists(
-            ['title', 'quality', 'languages', 'dontcare'],
+            ['title', 'quality', 'languages', 'any'],
             path_pattern.group_tag_mapping)
         self.assertEqual(4, path_pattern.length_without_any_tags, 'Invalid group length.')
 
-    def test_05_pathpatternanalyzer_anal_2(self):
+    def test_07_pathpatternanalyzer_3(self):
 
         # Arrange.
         tag_patterns = {
@@ -130,21 +176,25 @@ class IndexingTest(unittest.TestCase):
             'languages' : '([^/]+)',
             'quality' : '([^/]+)',
             'title' : '([^/]+)'}
-        tag_config = TagConfig('%', '%', ('dontcare', '[^/]+'), tag_patterns)
+        tag_config = TagConfig('%', '%', ('any', '[^/]+'), tag_patterns)
         path_pattern_analyzer = PathPatternAnalyzer()
 
         # Act.
         path_pattern = path_pattern_analyzer.parse(
             tag_config,
-            '%title%/Content/%quality%/%languages%/%dontcare%/%episode_title%')
+            '%title%/Content/%quality%/%languages%/%any%/%episode_title%')
 
         # Assert.
         self.assertEqual(
             '([^/]+)/Content/([^/]+)/([^/]+)/([^/]+/|)([^/]+)$',
             path_pattern.path_pattern_regexp.pattern,
             'The built pattern not equals with the expected one.')
+        self._compare_lists(
+            ['title', 'quality', 'languages', 'any', 'episode_title'],
+            path_pattern.group_tag_mapping)
+        self.assertEqual(5, path_pattern.length_without_any_tags, 'Invalid group length.')
 
-    def test_06_collectible(self):
+    def test_08_collectible(self):
 
         # Arrange.
         path_pattern = PathPattern('([^/]*)', ['a'], 1)
@@ -161,7 +211,7 @@ class IndexingTest(unittest.TestCase):
         self.assertEqual(path_pattern, collectible_2.path_pattern, 'PathPattern object has been tampered.')
         self.assertEqual('apple', collectible_2.token, 'Invalid token.')
 
-    def test_07_nodes(self):
+    def test_09_nodes(self):
 
         # Act.
         node = CategorizedNode('/foo/bar.txt')
@@ -181,7 +231,7 @@ class IndexingTest(unittest.TestCase):
         self.assertEqual(uncategorized_node_2.parent, uncategorized_node_1, 'Wrong parent for Node 2.')
         self.assertEqual(uncategorized_node_3.parent, uncategorized_node_1, 'Wrong parent for Node 3.')
 
-    def test_08_revision_filter(self):
+    def test_10_revision_filter(self):
 
         # Arrange.
         revision_filter = DirectoryFilter('^[0-9]{8} [0-9]{6}$')
@@ -195,7 +245,7 @@ class IndexingTest(unittest.TestCase):
         result = revision_filter.apply_filter('Apple/Banana/Cherry/Date')
         self.assertEqual(False, result, 'This path is not a revision.')
 
-    def test_09_indexer_policy(self):
+    def test_11_indexer_policy(self):
 
         # Arrange.
         collectible_1 = Collectible(['.avi', '.mp4'], 'Some/%video%/path', 'video')
@@ -216,7 +266,7 @@ class IndexingTest(unittest.TestCase):
         self.assertEqual(collectible_2, policy.get_collectible('.srt'), 'Wrong Collectible.')
         self.assertEqual(collectible_2, policy.get_collectible('.sub'), 'Wrong Collectible.')
 
-    def test_10_path_analyzer(self):
+    def test_12_path_analyzer(self):
 
         # Arrange.
         tag_config = TagConfig('%', '%', None, {'a' : '([^/]+)', 'b' : '([^/]+)'})
@@ -250,7 +300,7 @@ class IndexingTest(unittest.TestCase):
             0,
             'uncategorized')
 
-    def test_11_indexer(self):
+    def test_13_indexer(self):
 
         # Arrange.
         tag_patterns = {
@@ -296,7 +346,7 @@ class IndexingTest(unittest.TestCase):
             len(self._helper.files_path) + 1,
             'uncategorized')
 
-    def test_12_indexer_duplicates(self):
+    def test_14_indexer_duplicates(self):
 
         # Arrange.
         tag_patterns = {
