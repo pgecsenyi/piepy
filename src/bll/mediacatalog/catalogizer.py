@@ -161,9 +161,8 @@ class Catalogizer(object):
 
         # Do the indexing.
         indexer = Indexer()
-        indexer.add_policy(audio_indexer_policy)
         for directory in config.path:
-            indexer.add_directory(directory)
+            indexer.add_rule(directory, audio_indexer_policy)
         indexer.index()
 
     def _index_image_files(self, sync_only=False):
@@ -188,9 +187,8 @@ class Catalogizer(object):
 
         # Do the indexing.
         indexer = Indexer()
-        indexer.add_policy(image_indexer_policy)
         for directory in config.path:
-            indexer.add_directory(directory)
+            indexer.add_rule(directory, image_indexer_policy)
         indexer.index()
 
     def _index_video_files(self, sync_only=False):
@@ -221,9 +219,8 @@ class Catalogizer(object):
 
         # Do the indexing.
         indexer = Indexer()
-        indexer.add_policy(video_indexer_policy)
         for directory in config.path:
-            indexer.add_directory(directory)
+            indexer.add_rule(directory, video_indexer_policy)
         indexer.index()
 
     ####################################################################################################################

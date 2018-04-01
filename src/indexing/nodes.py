@@ -21,7 +21,7 @@ class Node(object):
         ### Attributes from outside.
         self._path = path
 
-        # Private attributes.
+        ### Private attributes.
         self._token = None
 
     ####################################################################################################################

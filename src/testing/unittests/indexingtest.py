@@ -328,8 +328,7 @@ class IndexingTest(unittest.TestCase):
         indexer_policy.tag_any = 'any'
 
         indexer = Indexer()
-        indexer.add_directory(self._helper.root_path)
-        indexer.add_policy(indexer_policy)
+        indexer.add_rule(self._helper.root_path, indexer_policy)
 
         # Act.
         indexer.index()
@@ -374,24 +373,15 @@ class IndexingTest(unittest.TestCase):
         indexer_policy.tag_any = 'any'
 
         indexer = Indexer()
-        indexer.add_directory(self._helper.root_path)
-        indexer.add_directory(self._helper.root_path)
-        indexer.add_policy(indexer_policy)
+        indexer.add_rule(self._helper.root_path, indexer_policy)
 
-        # Act.
-        indexer.index()
-
-        # Assert.
-        self._compare_path_lists(
-            self._environment.fake_categorized_files,
-            collector.collected_categorized_paths,
-            len(self._helper.files_path) + 1,
-            'categorized')
-        self._compare_path_lists(
-            self._environment.fake_uncategorized_files,
-            collector.collected_uncategorized_paths,
-            len(self._helper.files_path) + 1,
-            'uncategorized')
+        # Act and assert.
+        self._assert_raises_with_message(
+            Exception,
+            'Exception should be raised indicating duplicate policies.',
+            indexer.add_rule,
+            self._helper.root_path,
+            indexer_policy)
 
     ####################################################################################################################
     # Auxiliary methods.

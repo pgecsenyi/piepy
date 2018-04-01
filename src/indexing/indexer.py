@@ -1,6 +1,7 @@
 import os
 
 from indexing.pathanalyzer import PathAnalyzer
+from indexing.pathanalyzerstore import PathAnalyzerStore
 
 class Indexer(object):
     """
@@ -32,18 +33,16 @@ class Indexer(object):
         ### Private attributes.
         # A collection of analyzers which handle different file types.
         self._analyzers = []
-        # This dictionary stores which analyzer is associated to which file extension.
-        self._analyzers_by_extensions = {}
         # The depth we are currently in.
         self._current_depth = 0
         # The list of directories to index.
-        self._directories = []
+        self._rules = {}
 
     ####################################################################################################################
     # Public methods.
     ####################################################################################################################
 
-    def add_directory(self, directory):
+    def add_rule(self, directory, policy):
         """
         Registers a new directory to index. Does nothing if the given directory is already added.
 
@@ -51,27 +50,14 @@ class Indexer(object):
         ----------
         directory : str
             The directory to be indexed.
-        """
-
-        if directory not in self._directories:
-            self._directories.append(directory)
-
-    def add_policy(self, policy):
-        """
-        Registers a new policy.
-
-        Parameters
-        ----------
         policy : IndexerPolicy
-            The policy to register.
+            A policy that applies to this directory.
         """
 
-        analyzer = PathAnalyzer(policy)
-        self._analyzers.append(analyzer)
+        analyzer = self._create_analyzer(policy)
+        analyzer_store = self._create_analyzerstore(directory)
 
-        for extension in policy.extensions:
-            if extension not in self._analyzers_by_extensions.keys():
-                self._analyzers_by_extensions[extension] = analyzer
+        analyzer_store.add_analyzer(policy.extensions, analyzer)
 
     def index(self):
         """
@@ -81,9 +67,9 @@ class Indexer(object):
         for analyzer in self._analyzers:
             analyzer.init_filters()
 
-        for directory in self._directories:
+        for directory, analyzer_store in self._rules.items():
             if os.path.exists(directory):
-                self._scan_directory(directory)
+                self._scan_directory(directory, analyzer_store)
 
         for analyzer in self._analyzers:
             analyzer.clean_filters()
@@ -92,13 +78,27 @@ class Indexer(object):
     # Auxiliary methods.
     ####################################################################################################################
 
-    def _analyze_file(self, current_path):
+    def _analyze_file(self, current_path, analyzer_store):
 
         current_path_without_extension, current_extension = os.path.splitext(current_path)
-        if current_extension in self._analyzers_by_extensions:
-            analyzer = self._analyzers_by_extensions[current_extension]
-            if analyzer != None:
-                analyzer.analyze(current_path_without_extension, current_extension)
+
+        analyzer = analyzer_store.find_analyzer(current_extension)
+        if analyzer != None:
+            analyzer.analyze(current_path_without_extension, current_extension)
+
+    def _create_analyzer(self, policy):
+
+        analyzer = PathAnalyzer(policy)
+        self._analyzers.append(analyzer)
+
+        return analyzer
+
+    def _create_analyzerstore(self, directory):
+
+        if directory not in self._rules:
+            self._rules[directory] = PathAnalyzerStore()
+
+        return self._rules[directory]
 
     def _enter(self, directory):
         """
@@ -126,7 +126,7 @@ class Indexer(object):
         self._current_depth = self._current_depth - 1
 
 
-    def _scan_directory(self, path):
+    def _scan_directory(self, path, analyzer_store):
         """
         Does the real indexing. Iterates through the directory using DFS, and invokes the registered analyzers to
         analyze and store the data.
@@ -135,6 +135,8 @@ class Indexer(object):
         ----------
         path : str
             The path to enumerate.
+        analyzers : PathAnalyzerStore
+            The PathAnalyzerStore to use.
         """
 
         for current_file in os.listdir(path):
@@ -146,7 +148,7 @@ class Indexer(object):
 
             if os.path.isdir(current_path):
                 self._enter(current_file)
-                self._scan_directory(current_path)
+                self._scan_directory(current_path, analyzer_store)
                 self._leave()
             else:
-                self._analyze_file(current_path)
+                self._analyze_file(current_path, analyzer_store)
