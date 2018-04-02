@@ -21,10 +21,10 @@ class VideoSyncFilter(PathFilter):
         self._video_dal = video_dal
 
         ### Private attributes.
-        # A dictionary that stores subtitle file paths as id (int) => path (string) pairs.
-        self._stored_subtitle_paths = {}
-        # A dictionary that stores video file paths as id (int) => path (string) pairs.
-        self._stored_video_paths = {}
+        # A list of dictionaries storing subtitle file paths as id (int) => path (string) pairs.
+        self._stored_subtitle_paths = []
+        # A list of dictionaries storing video file paths as id (int) => path (string) pairs.
+        self._stored_video_paths = []
 
     ####################################################################################################################
     # PathFilter implementation.

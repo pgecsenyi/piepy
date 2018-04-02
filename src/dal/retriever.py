@@ -24,22 +24,6 @@ class Retriever(object):
     # Auxiliary methods.
     ####################################################################################################################
 
-    def _build_result_list(self, cursor):
-
-        # Fetch result.
-        rows = cursor.fetchall()
-        if rows is None or len(rows) <= 0:
-            return None
-        if len(rows[0]) != 1:
-            raise Exception('There are more than one columns in the result set.')
-
-        # Build result list.
-        result = []
-        for row in rows:
-            result.append(row[0])
-
-        return result
-
     def _execute_file_data_query(self, file_id, query):
 
         # Connect to the database.

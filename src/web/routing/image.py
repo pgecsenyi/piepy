@@ -66,9 +66,6 @@ def route_image_view(id_album):
     files_with_ids = image_dal.retriever.retrieve_paths(id_album)
 
     # Check if the given files exist.
-    if files_with_ids is None or not files_with_ids:
-        return False
-
     existing_files = []
     for id_and_path in files_with_ids:
         if path.exists(id_and_path['path']):

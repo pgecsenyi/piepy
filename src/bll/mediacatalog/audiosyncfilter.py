@@ -21,8 +21,8 @@ class AudioSyncFilter(PathFilter):
         self._audio_dal = audio_dal
 
         ### Private attributes.
-        # A dictionary that stores file paths as id (int) => path (string) pairs.
-        self._stored_paths = {}
+        # A list of dictionaries storing file paths as id (int) => path (string) pairs.
+        self._stored_paths = []
 
     ####################################################################################################################
     # PathFilter implementation.

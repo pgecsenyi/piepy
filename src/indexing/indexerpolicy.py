@@ -63,14 +63,8 @@ class IndexerPolicy(object):
         """
         Gets the filters for this policy.
         """
-        if self._filters != None:
-            return self._filters
-        self._filters = []
-        if self._filter_factory is None:
-            return self._filters
-        self._filters = self._filter_factory.create_filters()
-        if self._filters is None:
-            self._filters = []
+        self._create_filters()
+
         return self._filters
 
     @property
@@ -113,6 +107,15 @@ class IndexerPolicy(object):
     ####################################################################################################################
     # Private methods.
     ####################################################################################################################
+
+    def _create_filters(self):
+
+        if self._filters is not None:
+            return
+
+        self._filters = []
+        if self._filter_factory is not None:
+            self._filters = self._filter_factory.create_filters()
 
     def _group_collectibles_by_extensions(self, flat_collectibles):
 

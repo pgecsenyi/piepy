@@ -22,15 +22,16 @@ def build_result_dictionary(cursor, keys):
     A list of dictionaries containing values by the given keys.
     """
 
+    result = []
+
     # Fetch result.
     rows = cursor.fetchall()
-    if rows is None or len(rows) <= 0:
-        return None
+    if rows is None or not rows:
+        return result
     if len(rows[0]) != len(keys):
         raise Exception('Number of columns and key names differ.')
 
     # Build result list.
-    result = []
     for row in rows:
         item = {}
         for i in range(0, len(keys)):
