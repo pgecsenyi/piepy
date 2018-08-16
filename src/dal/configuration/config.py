@@ -35,8 +35,8 @@ class Config(object):
         """
 
         self.database.lifetime = 604800
-        self.database.path_media = 'media.db'
-        self.database.path_playlist = 'playlist.db'
+        self.database.path_media = '../data/media.db'
+        self.database.path_playlist = '../data/playlist.db'
         self.indexing.audio.extensions = ['.flac', '.mp3', '.ogg', '.wav']
         self.indexing.audio.path = ['/mnt/hdd/Audio']
         self.indexing.audio.pattern = '{}/{}/{} {}'.format(

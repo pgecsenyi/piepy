@@ -4,21 +4,21 @@ _PiE_ stands for Pi Entertainment. It consists of several modules. _PiEPy_ is a 
 
 ## Installation and usage
 
-Python server runs on a Linux operating system (specifically it has been tested on _Ubuntu 16.04_ and on _Raspbian 8_, but it may run on any other recent Linux distribution as well).
+Python server runs on a Linux operating system (specifically it has been tested on _Ubuntu 17.10_ and on _Raspbian 8_, but it may run on any other recent Linux distribution as well).
 
-First of all make sure you have Python 3 and pip installed along with an appropriate media player (either _VLC_ or _omxplayer_). Also install `pipenv` in case it is not installed already (`pip install --user pipenv`).
+First of all make sure you have Python 3 and pip installed along with an appropriate media player (either _VLC_ or _omxplayer_). Also install `pipenv` in case it is not installed already (`pip install --user pipenv`). You may have multiple Python environments installed, in this case do not forget to replace `pip` with `pip3` and `python` with `python3` (or whatever the binaries are named on your machine) in the commands listed here.
 
 Copy the contents of the folder `src` to a location of your choice and navigate to it in the _Terminal_. Then run the following command.
 
-    pipenv update
+    python -m pipenv update
 
 You can generate a configuration file by executing the server with the `-i` switch.
 
-    pipenv run python main.py -i -c config.json
+    python -m pipenv run python main.py -i -c config.json
 
 Take a look at the default configuration settings and edit them if you want. When you run the application, you can specify the location of the configuration file from the command line using the `-c` or `--config` arguments. The default location of the configuration file is `config.json`.
 
-    pipenv run python main.py -c ../data/config.json
+    python -m pipenv run python main.py -c ../data/config.json
 
 Please note the following.
 
@@ -61,5 +61,5 @@ _Visual Studio Code_ can be used to debug the application, in order to do that y
     * feh 2.19 Compile-time switches: curl exif xinerama
     * xdotool 3.20160805.1
   * Code editor
-    * Visual Studio Code 1.19.3
-      * Extension: Python 2018.2.1
+    * Visual Studio Code 1.25.1
+      * Extension: Python 2018.7.1
