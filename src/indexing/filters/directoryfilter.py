@@ -38,11 +38,7 @@ class DirectoryFilter(PathFilter):
         last_directory_name = self._get_last_directory_name(path)
 
         match = self._pattern.search(last_directory_name)
-        if match is None:
-            self._is_revision = False
-        else:
-            self._is_revision = True
-
+        self._is_revision = match is not None
         self._is_revision_checked = True
 
         return self._is_revision
