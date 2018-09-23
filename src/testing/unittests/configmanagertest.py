@@ -4,7 +4,8 @@ Config Manager unit tests.
 
 import unittest
 
-from dal.configuration.config import Config, DatabaseConfig, IndexingConfig, LoggingConfig, MultimediaConfig, WebConfig
+from dal.configuration.config import Config, DatabaseConfig, IndexingConfig, IndexerRuleConfig, LoggingConfig, \
+    MultimediaConfig, WebConfig
 from dal.configuration.configmanager import ConfigManager
 from testing.testhelper import TestHelper
 
@@ -63,18 +64,13 @@ class ConfigManagerTest(unittest.TestCase):
         return config1.database.lifetime == config2.database.lifetime \
             and config1.database.path_media == config2.database.path_media \
             and config1.database.path_playlist == config2.database.path_playlist \
-            and config1.indexing.audio.extensions == config2.indexing.audio.extensions \
-            and config1.indexing.audio.path == config2.indexing.audio.path \
-            and config1.indexing.audio.pattern == config2.indexing.audio.pattern \
-            and config1.indexing.image.extensions == config2.indexing.image.extensions \
-            and config1.indexing.image.path == config2.indexing.image.path \
-            and config1.indexing.image.pattern == config2.indexing.image.pattern \
-            and config1.indexing.video.extensions == config2.indexing.video.extensions \
+            and self._check_if_rules_are_equal(config1.indexing.audio.rules, config2.indexing.audio.rules) \
+            and self._check_if_rules_are_equal(config1.indexing.image.rules, config2.indexing.image.rules) \
             and config1.indexing.video.ignore_revisions == config2.indexing.video.ignore_revisions \
-            and config1.indexing.video.path == config2.indexing.video.path \
-            and config1.indexing.video.subtitle_extensions == config2.indexing.video.subtitle_extensions \
-            and config1.indexing.video.subtitle_pattern == config2.indexing.video.subtitle_pattern \
-            and config1.indexing.video.video_pattern == config2.indexing.video.video_pattern \
+            and self._check_if_rules_are_equal(
+                config1.indexing.video.subtitle_rules,
+                config2.indexing.video.subtitle_rules) \
+            and self._check_if_rules_are_equal(config1.indexing.video.video_rules, config2.indexing.video.video_rules) \
             and config1.logging.enabled == config2.logging.enabled \
             and config1.logging.level == config2.logging.level \
             and config1.logging.max_size_bytes == config2.logging.max_size_bytes \
@@ -84,6 +80,19 @@ class ConfigManagerTest(unittest.TestCase):
             and config1.multimedia.image_viewer == config2.multimedia.image_viewer \
             and config1.multimedia.image_viewer_path == config2.multimedia.image_viewer_path \
             and config1.web.port == config2.web.port
+
+    def _check_if_rules_are_equal(self, rules1, rules2):
+
+        if len(rules1) != len(rules2):
+            return False
+
+        for i in range(0, len(rules1)):
+            if rules1[i].directory != rules2[i].directory \
+                or rules1[i].extensions != rules2[i].extensions \
+                or rules1[i].pattern != rules2[i].pattern:
+                return False
+
+        return True
 
     def _create_test_config(self):
 
@@ -111,18 +120,29 @@ class ConfigManagerTest(unittest.TestCase):
 
         config = IndexingConfig()
 
-        config.audio.extensions = ['.ext1', '.ext2']
-        config.audio.path = ['/audio']
-        config.audio.pattern = 'audio_pattern'
-        config.image.extensions = ['.ext3', '.ext4']
-        config.image.path = ['/photo']
-        config.image.pattern = 'image_pattern'
-        config.video.extensions = ['.ext5', '.ext6']
-        config.video.ignore_revisions = False
-        config.video.path = ['/video']
-        config.video.subtitle_extensions = ['.ext7']
-        config.video.subtitle_pattern = 'subtitle_pattern'
-        config.video.video_pattern = 'video_pattern'
+        audio_indexing_rules = IndexerRuleConfig()
+        audio_indexing_rules.directory = '/audio'
+        audio_indexing_rules.extensions = ['.ext1', '.ext2']
+        audio_indexing_rules.pattern = 'audio_pattern'
+        config.audio.rules = [audio_indexing_rules]
+
+        image_indexing_rules = IndexerRuleConfig()
+        image_indexing_rules.directory = '/photo'
+        image_indexing_rules.extensions = ['.ext3', '.ext4']
+        image_indexing_rules.pattern = 'image_pattern'
+        config.image.rules = [image_indexing_rules]
+
+        video_indexing_rules = IndexerRuleConfig()
+        video_indexing_rules.directory = '/video'
+        video_indexing_rules.extensions = ['.ext5', '.ext6']
+        video_indexing_rules.pattern = 'video_pattern'
+        config.video.video_rules = [video_indexing_rules]
+
+        subtitle_indexing_rules = IndexerRuleConfig()
+        subtitle_indexing_rules.directory = '/video'
+        subtitle_indexing_rules.extensions = ['.ext7']
+        subtitle_indexing_rules.pattern = 'subtitle_pattern'
+        config.video.subtitle_rules = [subtitle_indexing_rules]
 
         return config
 

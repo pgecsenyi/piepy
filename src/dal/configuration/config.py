@@ -37,30 +37,35 @@ class Config(object):
         self.database.lifetime = 604800
         self.database.path_media = '../data/media.db'
         self.database.path_playlist = '../data/playlist.db'
-        self.indexing.audio.extensions = ['.flac', '.mp3', '.ogg', '.wav']
-        self.indexing.audio.path = ['/mnt/hdd/Audio']
-        self.indexing.audio.pattern = '{}/{}/{} {}'.format(
+        self.indexing.audio.rules = [IndexerRuleConfig()]
+        self.indexing.audio.rules[0].directory = '/mnt/hdd/Audio'
+        self.indexing.audio.rules[0].extensions = ['.flac', '.mp3', '.ogg', '.wav']
+        self.indexing.audio.rules[0].pattern = '{}/{}/{} {}'.format(
             get_complete_tag(TAG_ARTIST),
             get_complete_tag(TAG_ALBUM),
             get_complete_tag(TAG_NUMBER),
             get_complete_tag(TAG_TITLE))
-        self.indexing.image.extensions = ['.gif', '.jpg', '.jpeg', '.png']
-        self.indexing.image.path = ['/mnt/hdd/Image']
-        self.indexing.image.pattern = '{}/{}'.format(
+        self.indexing.image.rules = [IndexerRuleConfig()]
+        self.indexing.image.rules[0].directory = '/mnt/hdd/Image'
+        self.indexing.image.rules[0].extensions = ['.gif', '.jpg', '.jpeg', '.png']
+        self.indexing.image.rules[0].pattern = '{}/{}'.format(
             get_complete_tag(TAG_ALBUM),
             get_complete_tag(TAG_TITLE))
-        self.indexing.video.extensions = ['.avi', '.flv', '.mkv', '.mp4']
         self.indexing.video.ignore_revisions = False
-        self.indexing.video.path = ['/mnt/hdd/Video']
-        self.indexing.video.subtitle_extensions = ['.srt']
-        self.indexing.video.subtitle_pattern = '{}/Subtitle/{}/{}/{}/{}/{}'.format(
+        self.indexing.video.subtitle_rules = [IndexerRuleConfig()]
+        self.indexing.video.subtitle_rules[0].directory = '/mnt/hdd/Video'
+        self.indexing.video.subtitle_rules[0].extensions = ['.srt']
+        self.indexing.video.subtitle_rules[0].pattern = '{}/Subtitle/{}/{}/{}/{}/{}'.format(
             get_complete_tag(TAG_TITLE),
             get_complete_tag(TAG_QUALITY),
             get_complete_tag(TAG_LANGUAGES),
             get_complete_tag(TAG_LANGUAGE),
             get_complete_tag(TAG_ANY),
             get_complete_tag(TAG_EPISODE_TITLE))
-        self.indexing.video.video_pattern = '{}/Content/{}/{}/{}/{}'.format(
+        self.indexing.video.video_rules = [IndexerRuleConfig()]
+        self.indexing.video.video_rules[0].directory = '/mnt/hdd/Video'
+        self.indexing.video.video_rules[0].extensions = ['.avi', '.flv', '.mkv', '.mp4']
+        self.indexing.video.video_rules[0].pattern = '{}/Content/{}/{}/{}/{}'.format(
             get_complete_tag(TAG_TITLE),
             get_complete_tag(TAG_QUALITY),
             get_complete_tag(TAG_LANGUAGES),
@@ -92,9 +97,9 @@ class DatabaseConfig(object):
         self.path_media = None
         self.path_playlist = None
 
-class IndexingAudioImageConfig(object):
+class IndexerRuleConfig(object):
     """
-    Stores audio and image indexing related application settings.
+    Stores the configuration parameters of an Indexer Rule.
     """
 
     ####################################################################################################################
@@ -104,13 +109,27 @@ class IndexingAudioImageConfig(object):
     def __init__(self):
 
         ### Public attributes.
+        self.directory = None
         self.extensions = None
-        self.path = None
         self.pattern = None
+
+class IndexingAudioConfig(object):
+    """
+    Stores settings related to audio indexing.
+    """
+
+    ####################################################################################################################
+    # Constructor.
+    ####################################################################################################################
+
+    def __init__(self):
+
+        ### Public attributes.
+        self.rules = []
 
 class IndexingConfig(object):
     """
-    Stores indexing related application settings.
+    Stores settings related to indexing.
     """
 
     ####################################################################################################################
@@ -120,13 +139,27 @@ class IndexingConfig(object):
     def __init__(self):
 
         ### Public attributes.
-        self.audio = IndexingAudioImageConfig()
-        self.image = IndexingAudioImageConfig()
+        self.audio = IndexingAudioConfig()
+        self.image = IndexingImageConfig()
         self.video = IndexingVideoConfig()
+
+class IndexingImageConfig(object):
+    """
+    Stores settings related to image indexing.
+    """
+
+    ####################################################################################################################
+    # Constructor.
+    ####################################################################################################################
+
+    def __init__(self):
+
+        ### Public attributes.
+        self.rules = []
 
 class IndexingVideoConfig(object):
     """
-    Stores indexing related application settings.
+    Stores settings related to video indexing.
     """
 
     ####################################################################################################################
@@ -136,12 +169,9 @@ class IndexingVideoConfig(object):
     def __init__(self):
 
         ### Public attributes.
-        self.extensions = None
         self.ignore_revisions = False
-        self.path = None
-        self.subtitle_extensions = None
-        self.subtitle_pattern = None
-        self.video_pattern = None
+        self.subtitle_rules = []
+        self.video_rules = []
 
 class LoggingConfig(object):
     """

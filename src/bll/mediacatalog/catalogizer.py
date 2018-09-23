@@ -1,3 +1,4 @@
+from collections import defaultdict
 from datetime import datetime
 from os import path, unlink
 import logging
@@ -130,6 +131,21 @@ class Catalogizer(object):
     # Private methods -- Indexing.
     ####################################################################################################################
 
+    def _configure_indexer(self, indexer, collector, filter_factory, tag_config, rules, collectible_tag=None):
+
+        collectibles = []
+        path_pattern_analyzer = PathPatternAnalyzer()
+
+        for directory, rules_for_dir in self._group_rules_by_directory(rules).items():
+            for rule in rules_for_dir:
+                pattern = path_pattern_analyzer.parse(tag_config, rule.pattern)
+                collectible = Collectible(rule.extensions, pattern, collectible_tag)
+                collectibles.append(collectible)
+
+            indexer_policy = IndexerPolicy(collector, collectibles, filter_factory)
+            indexer_policy.tag_any = TAG_ANY
+            indexer.add_rule(directory, indexer_policy)
+
     def _index_all_files(self):
 
         with self._audio_dal.db_context.get_connection_provider():
@@ -145,24 +161,12 @@ class Catalogizer(object):
         if config is None:
             return
 
-        # Parse path pattern.
-        path_pattern_analyzer = PathPatternAnalyzer()
-        tag_config = TagConfig(TAG_START_SEPARATOR, TAG_END_SEPARATOR, (TAG_ANY, TAG_ANY_PATTERN), AUDIO_TAG_PATTERNS)
-        audio_pattern = path_pattern_analyzer.parse(tag_config, config.pattern)
-
-        # Create collector and filter factory.
         audio_collector = AudioCollector(self._audio_dal)
         audio_filter_factory = AudioFilterFactory(self._audio_dal, sync_only)
+        tag_config = TagConfig(TAG_START_SEPARATOR, TAG_END_SEPARATOR, (TAG_ANY, TAG_ANY_PATTERN), AUDIO_TAG_PATTERNS)
 
-        # Define policy.
-        audio_collectibles = [Collectible(config.extensions, audio_pattern)]
-        audio_indexer_policy = IndexerPolicy(audio_collector, audio_collectibles, audio_filter_factory)
-        audio_indexer_policy.tag_any = TAG_ANY
-
-        # Do the indexing.
         indexer = Indexer()
-        for directory in config.path:
-            indexer.add_rule(directory, audio_indexer_policy)
+        self._configure_indexer(indexer, audio_collector, audio_filter_factory, tag_config, config.rules)
         indexer.index()
 
     def _index_image_files(self, sync_only=False):
@@ -171,24 +175,12 @@ class Catalogizer(object):
         if config is None:
             return
 
-        # Parse path pattern.
-        path_pattern_analyzer = PathPatternAnalyzer()
-        tag_config = TagConfig(TAG_START_SEPARATOR, TAG_END_SEPARATOR, (TAG_ANY, TAG_ANY_PATTERN), IMAGE_TAG_PATTERNS)
-        image_pattern = path_pattern_analyzer.parse(tag_config, config.pattern)
-
-        # Create collector and filter factory.
         image_collector = ImageCollector(self._image_dal)
         image_filter_factory = ImageFilterFactory(self._image_dal, sync_only)
+        tag_config = TagConfig(TAG_START_SEPARATOR, TAG_END_SEPARATOR, (TAG_ANY, TAG_ANY_PATTERN), IMAGE_TAG_PATTERNS)
 
-        # Define policy.
-        image_collectibles = [Collectible(config.extensions, image_pattern)]
-        image_indexer_policy = IndexerPolicy(image_collector, image_collectibles, image_filter_factory)
-        image_indexer_policy.tag_any = TAG_ANY
-
-        # Do the indexing.
         indexer = Indexer()
-        for directory in config.path:
-            indexer.add_rule(directory, image_indexer_policy)
+        self._configure_indexer(indexer, image_collector, image_filter_factory, tag_config, config.rules)
         indexer.index()
 
     def _index_video_files(self, sync_only=False):
@@ -197,31 +189,31 @@ class Catalogizer(object):
         if config is None:
             return
 
-        # Parse path patterns.
-        path_pattern_analyzer = PathPatternAnalyzer()
-        video_tag_config = TagConfig(
-            TAG_START_SEPARATOR, TAG_END_SEPARATOR, (TAG_ANY, TAG_ANY_PATTERN), VIDEO_TAG_PATTERNS)
-        video_pattern = path_pattern_analyzer.parse(video_tag_config, config.video_pattern)
-        subtitle_tag_config = TagConfig(
-            TAG_START_SEPARATOR, TAG_END_SEPARATOR, (TAG_ANY, TAG_ANY_PATTERN), SUBTITLE_TAG_PATTERNS)
-        subtitle_pattern = path_pattern_analyzer.parse(subtitle_tag_config, config.subtitle_pattern)
-
-        # Create collector and filter factory.
         video_collector = VideoCollector(self._video_dal)
         video_filter_factory = VideoFilterFactory(self._video_dal, config.ignore_revisions, sync_only)
+        video_tag_config = TagConfig(
+            TAG_START_SEPARATOR, TAG_END_SEPARATOR, (TAG_ANY, TAG_ANY_PATTERN), VIDEO_TAG_PATTERNS)
+        subtitle_tag_config = TagConfig(
+            TAG_START_SEPARATOR, TAG_END_SEPARATOR, (TAG_ANY, TAG_ANY_PATTERN), SUBTITLE_TAG_PATTERNS)
 
-        # Define policy.
-        collectibles = [
-            Collectible(config.extensions, video_pattern, 'video'),
-            Collectible(config.subtitle_extensions, subtitle_pattern, 'subtitle')]
-        video_indexer_policy = IndexerPolicy(video_collector, collectibles, video_filter_factory)
-        video_indexer_policy.tag_any = TAG_ANY
-
-        # Do the indexing.
         indexer = Indexer()
-        for directory in config.path:
-            indexer.add_rule(directory, video_indexer_policy)
+        self._configure_indexer(
+            indexer,
+            video_collector, video_filter_factory, video_tag_config,
+            config.video_rules, 'video')
+        self._configure_indexer(
+            indexer,
+            video_collector, video_filter_factory, subtitle_tag_config,
+            config.subtitle_rules, 'subtitle')
         indexer.index()
+
+    def _group_rules_by_directory(self, rules):
+
+        result = defaultdict(list)
+        for rule in rules:
+            result[rule.directory].append(rule)
+
+        return result
 
     ####################################################################################################################
     # Private methods -- Database manipulation.

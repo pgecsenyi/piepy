@@ -85,7 +85,8 @@ class TestHelper(object):
         test_config.database.lifetime = 3600
         test_config.database.path_media = self._test_paths['database_media']
         test_config.database.path_playlist = self._test_paths['database_playlist']
-        test_config.indexing.video.path = [self._test_paths['files']]
+        test_config.indexing.video.subtitle_rules[0].directory = self._test_paths['files']
+        test_config.indexing.video.video_rules[0].directory = self._test_paths['files']
         test_config.logging.enabled = False
         test_config.web.port = 8096
 

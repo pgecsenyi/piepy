@@ -23,8 +23,8 @@ class PathAnalyzerStore(object):
 
             if extension in self._analyzers_by_extensions:
                 raise Exception(
-                    'Invalid configuration, an analyzer is already registered for the given extension. Do not register '
-                    'multiple rules for the same extensions in a directory.')
+                    F'Invalid configuration, an analyzer is already registered for the extension "{extension}". Do not '
+                    'register multiple rules for the same extensions in a directory.')
 
             self._analyzers_by_extensions[extension] = analyzer
 

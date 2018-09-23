@@ -7,7 +7,7 @@ Logic for managing application configuration.
 import json
 import os
 
-from dal.configuration.config import Config
+from dal.configuration.config import Config, IndexerRuleConfig
 
 class ConfigManager(object):
     """
@@ -107,22 +107,17 @@ class ConfigManager(object):
         json_config['indexing'] = {}
 
         json_config['indexing']['audio'] = {}
-        json_config['indexing']['audio']['extensions'] = config.indexing.audio.extensions
-        json_config['indexing']['audio']['paths'] = config.indexing.audio.path
-        json_config['indexing']['audio']['pattern'] = config.indexing.audio.pattern
+        json_config['indexing']['audio']['rules'] = ConfigManager._create_json_rules(config.indexing.audio.rules)
 
         json_config['indexing']['image'] = {}
-        json_config['indexing']['image']['extensions'] = config.indexing.image.extensions
-        json_config['indexing']['image']['paths'] = config.indexing.image.path
-        json_config['indexing']['image']['pattern'] = config.indexing.image.pattern
+        json_config['indexing']['image']['rules'] = ConfigManager._create_json_rules(config.indexing.image.rules)
 
         json_config['indexing']['video'] = {}
         json_config['indexing']['video']['ignore_revisions'] = config.indexing.video.ignore_revisions
-        json_config['indexing']['video']['paths'] = config.indexing.video.path
-        json_config['indexing']['video']['subtitle_extensions'] = config.indexing.video.subtitle_extensions
-        json_config['indexing']['video']['subtitle_pattern'] = config.indexing.video.subtitle_pattern
-        json_config['indexing']['video']['video_extensions'] = config.indexing.video.extensions
-        json_config['indexing']['video']['video_pattern'] = config.indexing.video.video_pattern
+        json_config['indexing']['video']['subtitle_rules'] = ConfigManager._create_json_rules(
+            config.indexing.video.subtitle_rules)
+        json_config['indexing']['video']['video_rules'] = ConfigManager._create_json_rules(
+            config.indexing.video.video_rules)
 
         # Logging.
         json_config['logging'] = {}
@@ -143,6 +138,32 @@ class ConfigManager(object):
         json_config['web']['port'] = config.web.port
 
         return json_config
+
+    @staticmethod
+    def _create_json_rules(rules):
+        """
+        Converts an Indexer Rule Configuration to a plain Python object using dictionaries and built-in structures.
+
+        Parameters
+        ----------
+        rules : list of IndexerRuleConfiguration
+            The configuration to save.
+
+        Returns
+        -------
+        A plain Python object that can be used for JSON serialization.
+        """
+
+        json_rules = []
+        for rule in rules:
+            json_rule = {
+                'directory': rule.directory,
+                'extensions': rule.extensions,
+                'pattern': rule.pattern
+            }
+            json_rules.append(json_rule)
+
+        return json_rules
 
     @staticmethod
     def _parse_json_config(json_config):
@@ -171,28 +192,23 @@ class ConfigManager(object):
 
             if 'audio' in json_config['indexing']:
 
-                config.indexing.audio.extensions = json_config['indexing']['audio']['extensions']
-                config.indexing.audio.path = json_config['indexing']['audio']['paths']
-                config.indexing.audio.pattern = json_config['indexing']['audio']['pattern']
+                config.indexing.audio.rules = ConfigManager._parse_json_rules(json_config['indexing']['audio']['rules'])
 
                 ConfigManager.categories.append('audio')
 
             if 'image' in json_config['indexing']:
 
-                config.indexing.image.extensions = json_config['indexing']['image']['extensions']
-                config.indexing.image.path = json_config['indexing']['image']['paths']
-                config.indexing.image.pattern = json_config['indexing']['image']['pattern']
+                config.indexing.image.rules = ConfigManager._parse_json_rules(json_config['indexing']['image']['rules'])
 
                 ConfigManager.categories.append('image')
 
             if 'video' in json_config['indexing']:
 
                 config.indexing.video.ignore_revisions = json_config['indexing']['video']['ignore_revisions']
-                config.indexing.video.extensions = json_config['indexing']['video']['video_extensions']
-                config.indexing.video.path = json_config['indexing']['video']['paths']
-                config.indexing.video.subtitle_extensions = json_config['indexing']['video']['subtitle_extensions']
-                config.indexing.video.subtitle_pattern = json_config['indexing']['video']['subtitle_pattern']
-                config.indexing.video.video_pattern = json_config['indexing']['video']['video_pattern']
+                config.indexing.video.subtitle_rules = ConfigManager._parse_json_rules(
+                    json_config['indexing']['video']['subtitle_rules'])
+                config.indexing.video.video_rules = ConfigManager._parse_json_rules(
+                    json_config['indexing']['video']['video_rules'])
 
                 ConfigManager.categories.append('video')
 
@@ -214,3 +230,30 @@ class ConfigManager(object):
         config.web.port = json_config['web']['port']
 
         return config
+
+    @staticmethod
+    def _parse_json_rules(json_rules):
+        """
+        Creates a list of IndexerRuleConfigs object from a plain Python list.
+
+        Parameters
+        ----------
+        json_config : list of object
+            The configuration containing the settings.
+
+        Returns
+        -------
+        A list of IndexerRuleConfig objects.
+        """
+
+        rules = []
+
+        for json_rule in json_rules:
+            rule = IndexerRuleConfig()
+            rule.directory = json_rule['directory']
+            rule.extensions = json_rule['extensions']
+            rule.pattern = json_rule['pattern']
+
+            rules.append(rule)
+
+        return rules
