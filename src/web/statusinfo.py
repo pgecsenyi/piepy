@@ -1,6 +1,6 @@
 import datetime
 
-class StatusInfo(object):
+class StatusInfo:
 
     ####################################################################################################################
     # Static attributes.

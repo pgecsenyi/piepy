@@ -123,7 +123,7 @@ class OmxPlayerHandler(PlayerHandler):
             program.append('hdmi')
 
         # Append the subtitle-related part to the command if necessary.
-        if subtitle_to_use != None:
+        if subtitle_to_use is not None:
             program.append('--subtitles')
             program.append(subtitle_to_use)
 

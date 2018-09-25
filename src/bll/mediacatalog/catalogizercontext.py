@@ -1,4 +1,4 @@
-class CatalogizerContext(object):
+class CatalogizerContext:
     """
     Stores parameters for the Catalogizer.
     """

@@ -1,4 +1,4 @@
-class PathAnalyzerStore(object):
+class PathAnalyzerStore:
     """
     Maps extensions to analyzers. To be used for storing the analyzers that should be used for specific extensions in a
     directory.

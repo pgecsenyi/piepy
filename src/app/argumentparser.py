@@ -8,7 +8,7 @@ import sys
 from dal.configuration.config import Config
 from dal.configuration.configmanager import ConfigManager
 
-class ArgumentParser(object):
+class ArgumentParser:
     """
     Parses command line arguments.
     """

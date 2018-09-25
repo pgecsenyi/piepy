@@ -51,7 +51,7 @@ class ImageDataCreator(Creator):
 
         # Check if the given album is already inserted.
         album_id = self._retriever.retrieve_album_id(album)
-        if album_id != None:
+        if album_id is not None:
             return album_id
 
         # Connect to the database.

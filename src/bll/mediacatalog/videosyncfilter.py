@@ -61,6 +61,7 @@ class VideoSyncFilter(PathFilter):
 
     def _remove_path_from_dictionary(self, path_list, path):
 
+        # pylint: disable=consider-using-enumerate
         for i in range(0, len(path_list)):
             if path == path_list[i]['path']:
                 del path_list[i]

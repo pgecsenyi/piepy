@@ -1,4 +1,4 @@
-class Collectible(object):
+class Collectible:
     """
     Encapsulates a category to be catalogized: it's extensions, patterns and optionally a token for the Collector.
     The latter allows a Collector to process and combine data from different file types.
@@ -23,7 +23,7 @@ class Collectible(object):
         """
 
         ### Validate parameters.
-        if extensions is None or len(extensions) <= 0:
+        if not extensions:
             raise Exception('extensions cannot be None or empty.')
         if path_pattern is None:
             raise Exception('path_pattern cannot be None.')

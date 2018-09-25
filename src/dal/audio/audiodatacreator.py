@@ -61,7 +61,7 @@ class AudioDataCreator(Creator):
 
         # Check if the given album is already inserted.
         album_id = self._retriever.retrieve_album_id(album)
-        if album_id != None:
+        if album_id is not None:
             return album_id
 
         # Connect to the database.
@@ -97,7 +97,7 @@ class AudioDataCreator(Creator):
 
         # Check if the given artist is already inserted.
         artist_id = self._retriever.retrieve_artist_id(artist)
-        if artist_id != None:
+        if artist_id is not None:
             return artist_id
 
         # Connect to the database.

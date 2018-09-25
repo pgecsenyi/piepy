@@ -3,7 +3,7 @@ import os
 from indexing.pathanalyzer import PathAnalyzer
 from indexing.pathanalyzerstore import PathAnalyzerStore
 
-class Indexer(object):
+class Indexer:
     """
     Traverses the given directory using the DFS algorithm. Allows registering different rules for handling different
     file types and calls the associated PathAnalyzers and Collectors indirectly for each type.
@@ -83,7 +83,7 @@ class Indexer(object):
         current_path_without_extension, current_extension = os.path.splitext(current_path)
 
         analyzer = analyzer_store.find_analyzer(current_extension)
-        if analyzer != None:
+        if analyzer is not None:
             analyzer.analyze(current_path_without_extension, current_extension)
 
     def _create_analyzer(self, policy):

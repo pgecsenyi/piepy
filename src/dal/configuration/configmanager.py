@@ -9,7 +9,7 @@ import os
 
 from dal.configuration.config import Config, IndexerRuleConfig
 
-class ConfigManager(object):
+class ConfigManager:
     """
     Handles and persists application configuration.
     """

@@ -43,8 +43,10 @@ def route_player_play(category, item_id):
     # Play.
     if category == 'audio':
         return audio_player_adapter.play_from_id(item_id)
-    elif category == 'video':
+    if category == 'video':
         return video_player_adapter.play_from_id(item_id)
+
+    return False
 
 @player.route('/player/<string:operation>', methods=['GET'])
 def route_player_simple_operation(operation):
@@ -152,7 +154,7 @@ def _execute_operation_on_players(player_adapters, operation):
 
 def _get_player_adapters_for_category(category):
 
-    is_category_provided = (category != None) and (category.strip() != '')
+    is_category_provided = (category is not None) and (category.strip() != '')
     player_adapters = []
 
     if (not is_category_provided) or (category == 'audio'):

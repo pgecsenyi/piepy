@@ -1,4 +1,4 @@
-class PathFilter(object):
+class PathFilter:
     """
     Interface that defines how a path filter should look like. Path filters are used by the PathAnalyzer which uses
     them to decide whether a path should be analyzed (and catalogized) or not.

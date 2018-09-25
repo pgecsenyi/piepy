@@ -26,7 +26,7 @@ import web.routing.playlist
 import web.routing.video
 from web.statusinfo import StatusInfo
 
-class WebApiConfigurator(object):
+class WebApiConfigurator:
     """
     Implements web interface configurator logic.
     """

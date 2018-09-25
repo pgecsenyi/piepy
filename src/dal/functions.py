@@ -34,6 +34,7 @@ def build_result_dictionary(cursor, keys):
     # Build result list.
     for row in rows:
         item = {}
+        # pylint: disable=consider-using-enumerate
         for i in range(0, len(keys)):
             item[keys[i]] = row[i]
         result.append(item)

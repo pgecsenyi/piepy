@@ -4,7 +4,7 @@ import subprocess
 
 from multimedia.functions import terminate_process
 
-class FehImageViewerHandler(object):
+class FehImageViewerHandler:
     """
     Interface for feh image viewer which is an X11 application that can be started from the command line. It is
     controlled by sending spoofed keystrokes through xdotool.

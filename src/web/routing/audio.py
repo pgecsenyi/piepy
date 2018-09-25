@@ -24,7 +24,7 @@ def route_audio_albums():
     """
 
     artist_id = None
-    if (request.args != None) and ('artist' in request.args):
+    if (request.args is not None) and ('artist' in request.args):
         artist_id = request.args['artist']
 
     result = audio_dal_retriever.retrieve_albums(artist_id)

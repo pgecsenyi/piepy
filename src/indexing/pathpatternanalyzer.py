@@ -1,7 +1,7 @@
 from indexing.pathpattern import PathPattern
 from indexing.pathpatternpreprocessor import PathPatternPreprocessor
 
-class PathPatternAnalyzer(object):
+class PathPatternAnalyzer:
     """
     Receives a path containing tags as a string and builds a regular expression from it (to be more precise, it builds a
     PathPattern object).
@@ -96,7 +96,7 @@ class PathPatternAnalyzer(object):
             elif is_in_tag:
                 if char == self._tag_config.end:
                     self._verify_tag(current_tag)
-                    if (self._tag_config.tag_any != None) and (current_tag == self._tag_config.tag_any[0]):
+                    if (self._tag_config.tag_any is not None) and (current_tag == self._tag_config.tag_any[0]):
                         is_after_any_tag = True
                     self._path_pattern_regexp = self._path_pattern_regexp + '{0[' + str(current_group_index) + ']}'
                     self._group_tag_mapping.append(current_tag)
@@ -125,7 +125,7 @@ class PathPatternAnalyzer(object):
 
         # Iterate through the group-tag mapping and substitute ANY tags.
         for tag in self._group_tag_mapping:
-            if (self._tag_config.tag_any != None) and (tag == self._tag_config.tag_any[0]):
+            if (self._tag_config.tag_any is not None) and (tag == self._tag_config.tag_any[0]):
                 char_after_any_tag = ''
                 if after_any_tag_index < len(after_any_tags):
                     char_after_any_tag = after_any_tags[after_any_tag_index]
@@ -156,7 +156,7 @@ class PathPatternAnalyzer(object):
             The tag to verify.
         """
 
-        if (self._tag_config.tag_any != None) and (tag == self._tag_config.tag_any[0]):
+        if (self._tag_config.tag_any is not None) and (tag == self._tag_config.tag_any[0]):
             return
         if tag not in self._tag_config.tag_patterns.keys():
             raise Exception('The path contains an invalid tag: ' + tag + '.')

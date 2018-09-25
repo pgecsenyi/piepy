@@ -41,7 +41,7 @@ class ImageDataRetriever(Retriever):
             # Build and execute the query.
             query_parameters = {}
             where_clause = ''
-            if album_id != None:
+            if album_id is not None:
                 where_clause = ' WHERE id_album=:id_album'
                 query_parameters['id_album'] = album_id
             cursor.execute('SELECT id, path FROM image_file' + where_clause, query_parameters)

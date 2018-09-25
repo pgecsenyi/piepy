@@ -7,7 +7,7 @@ from dal.context.dbcontext import DbContext
 from dal.image.imagedatahandler import ImageDataHandler
 from dal.video.videodatahandler import VideoDataHandler
 
-class MediaDataHandler(object):
+class MediaDataHandler:
     """
     Media DAL accessor.
     """
@@ -42,7 +42,7 @@ class MediaDataHandler(object):
     def video_data_handler(self) -> VideoDataHandler:
         return self._video_data_handler
 
-class MediaDataHandlerFactory(object):
+class MediaDataHandlerFactory:
 
     @staticmethod
     def create(database_path: str) -> MediaDataHandler:

@@ -191,7 +191,7 @@ class VlcPlayerHandler(PlayerHandler):
         program.append(file_to_play)
 
         # Append the subtitle-related part to the command if necessary.
-        if subtitle_to_use != None:
+        if subtitle_to_use is not None:
             program.append('--sub-file=' + subtitle_to_use)
 
         return program
@@ -209,7 +209,7 @@ class VlcPlayerHandler(PlayerHandler):
         Closes UDS.
         """
 
-        if self._socket != None:
+        if self._socket is not None:
             self._socket.close()
             self._socket = None
 

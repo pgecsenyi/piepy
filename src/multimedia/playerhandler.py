@@ -1,4 +1,4 @@
-class PlayerHandler(object):
+class PlayerHandler:
     """
     Interface that describes how a player handler should look like.
     """

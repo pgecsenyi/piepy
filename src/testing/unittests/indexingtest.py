@@ -241,7 +241,7 @@ class IndexingTest(unittest.TestCase):
         self.assertEqual(True, result, 'This path is a revision.')
         result = revision_filter.apply_filter('Apple/Banana/Cherry/Date')
         self.assertEqual(True, result, 'Result is not cached correctly.')
-        result = revision_filter.leave_scope()
+        revision_filter.leave_scope()
         result = revision_filter.apply_filter('Apple/Banana/Cherry/Date')
         self.assertEqual(False, result, 'This path is not a revision.')
 
@@ -432,6 +432,7 @@ class IndexingTest(unittest.TestCase):
             len(actual_list),
             'The length of the expected and the actual lists differ.')
 
+        # pylint: disable=consider-using-enumerate
         for i in range(0, len(expected_list)):
             self.assertEqual(
                 expected_list[i],
@@ -467,12 +468,12 @@ class IndexingTest(unittest.TestCase):
             len(actual_list),
             'The length of the expected and the actual lists differ.')
 
-        for i in range(0, len(expected_list)):
-            if expected_list[i] not in actual_list:
-                self.fail('Actual list does not contain the expected item: {}.'.format(expected_list[i]))
-        for i in range(0, len(actual_list)):
-            if actual_list[i] not in expected_list:
-                self.fail('Actual list contains an unexpected item: {}.'.format(actual_list[i]))
+        for expected in expected_list:
+            if expected not in actual_list:
+                self.fail('Actual list does not contain the expected item: {}.'.format(expected))
+        for actual in actual_list:
+            if actual not in expected_list:
+                self.fail('Actual list contains an unexpected item: {}.'.format(actual))
 
 ########################################################################################################################
 # Mocked classes.

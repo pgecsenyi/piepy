@@ -136,11 +136,11 @@ def _get_status_string(status):
 
     if status == Catalogizer.STATUS_COMPLETED:
         return "completed"
-    elif status == Catalogizer.STATUS_IN_PROGRESS:
+    if status == Catalogizer.STATUS_IN_PROGRESS:
         return "in progress"
-    elif status == Catalogizer.STATUS_NOT_RUNNING:
+    if status == Catalogizer.STATUS_NOT_RUNNING:
         return "not running"
-    elif status == Catalogizer.STATUS_STARTED:
+    if status == Catalogizer.STATUS_STARTED:
         return "started"
 
     return "unknown"

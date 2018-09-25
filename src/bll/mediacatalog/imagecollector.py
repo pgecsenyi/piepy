@@ -27,7 +27,7 @@ class ImageCollector(Collector):
     def collect_categorized(self, categorized_nodes):
 
         # Nothing to do here.
-        if categorized_nodes is None or len(categorized_nodes) <= 0:
+        if not categorized_nodes:
             return
 
         for node in categorized_nodes:
@@ -36,7 +36,7 @@ class ImageCollector(Collector):
     def collect_uncategorized(self, uncategorized_nodes):
 
         # Nothing to do here.
-        if uncategorized_nodes is None or len(uncategorized_nodes) <= 0:
+        if not uncategorized_nodes:
             return
 
         for node in uncategorized_nodes:

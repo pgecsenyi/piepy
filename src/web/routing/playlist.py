@@ -208,7 +208,7 @@ def _validate_category(category):
 
 def _validate_request_arguments(required_arguments):
 
-    if (request.json is None) or (len(request.json) <= 0):
+    if not request.json:
         abort(400)
 
     for required_argument in required_arguments:
@@ -293,9 +293,11 @@ def _track_to_json(track_bll, number=0):
 
 def _tracks_to_json(tracks_bll):
 
+    number = 0
     tracks_json = []
-    for i in range(0, len(tracks_bll)):
-        number = i + 1
-        tracks_json.append(_track_to_json(tracks_bll[i], number))
+
+    for track_bll in tracks_bll:
+        tracks_json.append(_track_to_json(track_bll, number))
+        number = number + 1
 
     return tracks_json

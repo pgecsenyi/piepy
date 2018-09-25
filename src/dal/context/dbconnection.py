@@ -1,7 +1,7 @@
 import os
 import sqlite3
 
-class DbConnection(object):
+class DbConnection:
 
     ####################################################################################################################
     # Constructor.

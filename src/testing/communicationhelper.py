@@ -6,7 +6,7 @@ def build_json_header_and_payload(payload=None):
     headers = None
     json_payload = None
 
-    if payload != None:
+    if payload is not None:
         headers = {'Content-Type' : 'application/json'}
         json_payload = json.dumps(payload)
 

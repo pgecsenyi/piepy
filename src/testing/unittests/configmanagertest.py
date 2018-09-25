@@ -86,6 +86,7 @@ class ConfigManagerTest(unittest.TestCase):
         if len(rules1) != len(rules2):
             return False
 
+        # pylint: disable=consider-using-enumerate
         for i in range(0, len(rules1)):
             if rules1[i].directory != rules2[i].directory \
                 or rules1[i].extensions != rules2[i].extensions \

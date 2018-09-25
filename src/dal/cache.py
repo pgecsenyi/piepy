@@ -1,4 +1,4 @@
-class Cache(object):
+class Cache:
 
     def _get_value_from_simple_cache(self, cache, lock, key):
 
@@ -10,8 +10,6 @@ class Cache(object):
 
     def _store_item_in_simple_cache(self, cache, lock, key, value):
 
-        if key != None:
+        if key is not None:
             with lock:
                 cache[key] = value
-
-        return None

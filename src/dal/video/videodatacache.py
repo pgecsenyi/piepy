@@ -72,7 +72,7 @@ class VideoDataCache(Cache):
 
     def set_title_id(self, title, title_id, parent_id=0):
 
-        if title != None:
+        if title is not None:
             with self._title_cache_lock:
                 if parent_id not in self._title_cache:
                     self._title_cache[parent_id] = {}

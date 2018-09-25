@@ -1,4 +1,4 @@
-class NewPlaylist(object):
+class NewPlaylist:
     """
     Represents a new playlist, which is about to be stored.
     """
@@ -41,7 +41,7 @@ class NewPlaylist(object):
     def tracks(self):
         return self._tracks
 
-class NewPlaylistTrack(object):
+class NewPlaylistTrack:
     """
     Represents a track on a new playlist.
     """
@@ -98,7 +98,7 @@ class NewPlaylistTrack(object):
     def file_id(self):
         return self._file_id
 
-class Playlist(object):
+class Playlist:
     """
     Represents a playlist.
     """
@@ -136,7 +136,7 @@ class Playlist(object):
     def tracks(self):
         return self._tracks
 
-class PlaylistHeader(object):
+class PlaylistHeader:
     """
     Stores the ID and the title of a playlist without the tracks.
     """
@@ -169,7 +169,7 @@ class PlaylistHeader(object):
     def title(self):
         return self._title
 
-class PlaylistTrack(object):
+class PlaylistTrack:
     """
     Represents a track of a playlist.
     """

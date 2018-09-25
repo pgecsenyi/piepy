@@ -18,7 +18,7 @@ from indexing.indexerpolicy import IndexerPolicy
 from indexing.pathpatternanalyzer import PathPatternAnalyzer
 from indexing.tagconfig import TagConfig
 
-class Catalogizer(object):
+class Catalogizer:
     """
     Responsible for refreshing the media database either by synchronizing or completely rebuilding it.
     """
@@ -276,7 +276,7 @@ class Catalogizer(object):
     def _execute_function(self, func, callback):
 
         result = func()
-        if callback != None:
+        if callback is not None:
             callback(result)
 
     def _start_async_process(self, func, callback=None):

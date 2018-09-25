@@ -3,7 +3,7 @@ import time
 
 import requests
 
-class ServerManager(object):
+class ServerManager:
 
     ####################################################################################################################
     # Constructor.
@@ -32,7 +32,7 @@ class ServerManager(object):
 
     def stop(self):
 
-        if self._current_process != None:
+        if self._current_process is not None:
             self._current_process.terminate()
             self._current_process.wait()
             self._current_process = None

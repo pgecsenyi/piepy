@@ -1,6 +1,6 @@
 from dal.playlist.entities import Playlist, PlaylistHeader, PlaylistTrack
 
-class PlaylistDataHandler(object):
+class PlaylistDataHandler:
 
     ####################################################################################################################
     # Constructor.
@@ -108,7 +108,7 @@ class PlaylistDataHandler(object):
 
         # Verify arguments.
         if new_playlist is None:
-            return
+            return None
 
         # Connect to the database.
         with self._db_context.get_connection_provider() as connection:
@@ -147,7 +147,7 @@ class PlaylistDataHandler(object):
 
         # Verify arguments.
         if playlist_id is None or new_track is None:
-            return
+            return None
 
         # Connect to the database.
         with self._db_context.get_connection_provider() as connection:
@@ -276,7 +276,7 @@ class PlaylistDataHandler(object):
 
             # Fetch result.
             rows = cursor.fetchall()
-            if rows is None or len(rows) <= 0:
+            if not rows:
                 return None
             playlist_headers = []
             for row in rows:
@@ -329,12 +329,13 @@ class PlaylistDataHandler(object):
         if new_tracks is None:
             return
 
-        for i in range(0, len(new_tracks)):
+        number = 1
+        for new_track in new_tracks:
             cursor.execute(
                 'INSERT INTO track (id_playlist, number, category, title, path, audio_output) '
                 'VALUES (?, ?, ?, ?, ?, ?)',
-                (playlist_id, i + 1, new_tracks[i].category, new_tracks[i].title, new_tracks[i].path,
-                 new_tracks[i].audio_output))
+                (playlist_id, number, new_track.category, new_track.title, new_track.path, new_track.audio_output))
+            number = number + 1
 
     def _retrieve_last_track_number(self, cursor, playlist_id):
 
@@ -369,7 +370,7 @@ class PlaylistDataHandler(object):
 
         # Fetch result.
         rows = cursor.fetchall()
-        if rows is None or len(rows) <= 0:
+        if not rows:
             return None
 
         tracks = []

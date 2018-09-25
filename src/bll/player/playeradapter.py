@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from os import path
 
 from flask import abort
@@ -5,7 +6,7 @@ from flask import jsonify
 
 from multimedia.constants import AUDIO_OUTPUT_ANALOG, AUDIO_OUTPUT_DIGITAL
 
-class PlayerAdapter(object):
+class PlayerAdapter:
 
     ####################################################################################################################
     # Constructor.
@@ -34,7 +35,7 @@ class PlayerAdapter(object):
     def play_from_arguments(self, arguments):
 
         # File id is given as a request argument.
-        if (arguments is None) or (len(arguments) <= 0) or ('id' not in arguments):
+        if not arguments or ('id' not in arguments):
             abort(404)
 
         # Check category, get filename from database.
@@ -56,7 +57,7 @@ class PlayerAdapter(object):
             subtitle_to_use = self._get_subtitle_by_id(arguments['subtitle'])
 
         # Check if the given subtitle file exists.
-        if subtitle_to_use != None and not path.exists(subtitle_to_use):
+        if subtitle_to_use is not None and not path.exists(subtitle_to_use):
             return None
 
         # Play.
@@ -86,8 +87,10 @@ class PlayerAdapter(object):
     # Protected overrideables.
     ####################################################################################################################
 
+    @abstractmethod
     def _get_file_by_id(self, file_id):
         pass
 
+    @abstractmethod
     def _get_subtitle_by_id(self, file_id):
         pass

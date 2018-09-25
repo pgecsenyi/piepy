@@ -25,7 +25,7 @@ class AudioDataRetriever(Retriever):
             # Get table contents.
             where_clause = ''
             query_parameters = {}
-            if artist_id != None:
+            if artist_id is not None:
                 where_clause = 'WHERE id_artist=:id_artist '
                 query_parameters = {'id_artist' : artist_id}
             cursor.execute('SELECT id, album FROM audio_album ' + where_clause + 'ORDER BY album', query_parameters)
@@ -90,7 +90,7 @@ class AudioDataRetriever(Retriever):
             # Get table contents.
             where_clause = ''
             query_parameters = {}
-            if album_id != None:
+            if album_id is not None:
                 where_clause = 'WHERE id_album=:id_album '
                 query_parameters = {'id_album' : album_id}
             cursor.execute(

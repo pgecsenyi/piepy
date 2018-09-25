@@ -1,6 +1,6 @@
 from indexing.strrange import StrRange
 
-class PathPatternPreprocessor(object):
+class PathPatternPreprocessor:
     """
     Normalizes the path, escapes special characters in it, checks whether it is stable and calculates it's length.
     """
@@ -74,7 +74,7 @@ class PathPatternPreprocessor(object):
     def _build_any_tag_complete(self):
 
         self._any_tag_complete = None
-        if self._tag_config.tag_any != None:
+        if self._tag_config.tag_any is not None:
             self._any_tag_complete = self._tag_config.start + self._tag_config.tag_any[0] + self._tag_config.end
 
     def _check_consecutive_tags(self):
@@ -82,10 +82,11 @@ class PathPatternPreprocessor(object):
         is_after_tag = False
 
         for char in self._path_pattern_string:
+
             if is_after_tag and char == self._tag_config.start:
                 return True
-            else:
-                is_after_tag = char == self._tag_config.end
+
+            is_after_tag = char == self._tag_config.end
 
         return False
 
@@ -105,23 +106,24 @@ class PathPatternPreprocessor(object):
         path_pattern_as_list = self._path_pattern_string.split('/')
 
         # Iterate through every node in the path pattern.
-        for i in range(0, len(path_pattern_as_list)):
+        for path_pattern in path_pattern_as_list:
 
             # Get the tag from the current item.
-            current_item = path_pattern_as_list[i]
+            current_item = path_pattern
             is_fixpoint = True
             is_in_tag = False
             tag_range = StrRange()
 
-            for j in range(0, len(current_item)):
-                char = current_item[j]
+            # pylint: disable=consider-using-enumerate
+            for char_index in range(0, len(current_item)):
+                char = current_item[char_index]
                 if is_in_tag and char == self._tag_config.end:
                     is_fixpoint = False
-                    tag_range.end = j
+                    tag_range.end = char_index
                     break
                 elif char == self._tag_config.start:
                     is_fixpoint = False
-                    tag_range.start = j
+                    tag_range.start = char_index
                     is_in_tag = True
 
             # Check if we have a fix point so far (have one already or the current node is fix).

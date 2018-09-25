@@ -33,7 +33,7 @@ class VideoDataRetriever(Retriever):
                 'WHERE f.id_title=? AND q.id=f.id_quality AND m.id_file=f.id',
                 (title_id,))
             rows = cursor.fetchall()
-            if rows is None or not rows:
+            if not rows:
                 return None
 
             for row in rows:
@@ -48,7 +48,7 @@ class VideoDataRetriever(Retriever):
                     'WHERE s.id_file=? AND l.id=s.id_language',
                     (video_file['id'],))
                 rows = cursor.fetchall()
-                if rows != None and rows:
+                if rows:
                     for row in rows:
                         result['subtitles'].append({'file' : video_file['id'], 'id' : row[0], 'language' : row[1]})
 
@@ -118,7 +118,7 @@ class VideoDataRetriever(Retriever):
 
         # Check if the given title is already available in the cache.
         title_id = self._cache.get_title_id_from_other_parents(title, 0)
-        if title_id != None:
+        if title_id is not None:
             return title_id
 
         # Connect to the database.
@@ -193,7 +193,7 @@ class VideoDataRetriever(Retriever):
 
         # Check if the given title is already available in the cache.
         title_id = self._cache.get_title_id(title, parent_id)
-        if title_id != None:
+        if title_id is not None:
             return title_id
 
         # Connect to the database.
@@ -273,7 +273,7 @@ class VideoDataRetriever(Retriever):
                     where_clause_beginning = 'WHERE t.id_parent=:parent_id '
                     query_parameters['parent_id'] = title_filter.parent_id
 
-            if title_filter.subtitle_language_id != None:
+            if title_filter.subtitle_language_id is not None:
                 where_clause_beginning = self._append_to_where_clause(
                     where_clause_beginning,
                     '(t.id IN (SELECT id_title ' \
@@ -281,7 +281,7 @@ class VideoDataRetriever(Retriever):
                     + 'WHERE id_language=:subtitle_language_id)) ')
                 query_parameters['subtitle_language_id'] = title_filter.subtitle_language_id
 
-            if title_filter.text != None:
+            if title_filter.text is not None:
                 where_clause_beginning = self._append_to_where_clause(where_clause_beginning, 'title LIKE :text ')
                 query_parameters['text'] = '%' + title_filter.text + '%'
 

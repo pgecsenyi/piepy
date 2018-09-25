@@ -7,7 +7,7 @@ Data structure to store configuration.
 from dal.configuration.tags import get_complete_tag, TAG_ALBUM, TAG_ANY, TAG_ARTIST, TAG_EPISODE_TITLE, TAG_LANGUAGE, \
                                    TAG_LANGUAGES, TAG_NUMBER, TAG_QUALITY, TAG_TITLE
 
-class Config(object):
+class Config:
     """
     Stores application settings.
     """
@@ -81,7 +81,7 @@ class Config(object):
         self.multimedia.image_viewer_path = '/usr/bin/feh'
         self.web.port = 8095
 
-class DatabaseConfig(object):
+class DatabaseConfig:
     """
     Stores database related application settings.
     """
@@ -97,7 +97,7 @@ class DatabaseConfig(object):
         self.path_media = None
         self.path_playlist = None
 
-class IndexerRuleConfig(object):
+class IndexerRuleConfig:
     """
     Stores the configuration parameters of an Indexer Rule.
     """
@@ -113,7 +113,7 @@ class IndexerRuleConfig(object):
         self.extensions = None
         self.pattern = None
 
-class IndexingAudioConfig(object):
+class IndexingAudioConfig:
     """
     Stores settings related to audio indexing.
     """
@@ -127,7 +127,7 @@ class IndexingAudioConfig(object):
         ### Public attributes.
         self.rules = []
 
-class IndexingConfig(object):
+class IndexingConfig:
     """
     Stores settings related to indexing.
     """
@@ -143,7 +143,7 @@ class IndexingConfig(object):
         self.image = IndexingImageConfig()
         self.video = IndexingVideoConfig()
 
-class IndexingImageConfig(object):
+class IndexingImageConfig:
     """
     Stores settings related to image indexing.
     """
@@ -157,7 +157,7 @@ class IndexingImageConfig(object):
         ### Public attributes.
         self.rules = []
 
-class IndexingVideoConfig(object):
+class IndexingVideoConfig:
     """
     Stores settings related to video indexing.
     """
@@ -173,7 +173,7 @@ class IndexingVideoConfig(object):
         self.subtitle_rules = []
         self.video_rules = []
 
-class LoggingConfig(object):
+class LoggingConfig:
     """
     Stores logging configuration.
     """
@@ -190,7 +190,7 @@ class LoggingConfig(object):
         self.max_size_bytes = None
         self.path = None
 
-class MultimediaConfig(object):
+class MultimediaConfig:
     """
     Stores multimedia related application settings.
     """
@@ -207,7 +207,7 @@ class MultimediaConfig(object):
         self.image_viewer = None
         self.image_viewer_path = None
 
-class WebConfig(object):
+class WebConfig:
     """
     Stores web related application settings.
     """

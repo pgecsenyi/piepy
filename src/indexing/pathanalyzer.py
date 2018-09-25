@@ -1,6 +1,6 @@
 from indexing.nodes import CategorizedNode, UncategorizedNode
 
-class PathAnalyzer(object):
+class PathAnalyzer:
     """
     Matches the given pattern against the given path, separating paths that match the pattern from those that do not.
     Forwards the collected data to the Collector in batches when all the necessary information become available.
@@ -128,7 +128,7 @@ class PathAnalyzer(object):
         for path_filter in self._policy.filters:
             path_filter.leave_scope()
 
-        if self._last_node_as_uncategorized != None:
+        if self._last_node_as_uncategorized is not None:
             self._last_node_as_uncategorized = self._last_node_as_uncategorized.parent
 
         self._current_depth = self._current_depth - 1
@@ -183,14 +183,14 @@ class PathAnalyzer(object):
         matches = path_pattern.path_pattern_regexp.search(path)
         node = None
 
-        if matches != None:
+        if matches is not None:
 
             depth = path_pattern.length_without_any_tags
             node = CategorizedNode(path + extension)
             i = 0
 
             for match in matches.groups():
-                if match != None and match != '':
+                if match not in (None, ''):
                     if path_pattern.group_tag_mapping[i] == self._policy.tag_any:
                         depth = depth + 1
                     else:

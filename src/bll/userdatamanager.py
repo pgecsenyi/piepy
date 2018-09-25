@@ -1,7 +1,7 @@
 import os
 import threading
 
-class UserDataManager(object):
+class UserDataManager:
     """
     Responsible for managing user data (for example playlists database creation).
     """

@@ -1,4 +1,4 @@
-class TagConfig(object):
+class TagConfig:
     """
     Defines the tags used during indexing.
     """
@@ -28,7 +28,7 @@ class TagConfig(object):
             raise Exception('start cannot be None.')
         if end is None:
             raise Exception('end cannot be None.')
-        if tag_patterns is None or len(tag_patterns) <= 0:
+        if not tag_patterns:
             raise Exception('patterns cannot be None or empty.')
 
         ### Attributes from outside.

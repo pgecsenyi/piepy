@@ -1,4 +1,4 @@
-class Collector(object):
+class Collector:
     """
     Interface that describes file processors: the path analyzer will forward each analyzed file (to be more precise,
     the analyzed files in a batch) to a Collector implementation which supposed to store structured data, execute

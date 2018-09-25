@@ -5,7 +5,7 @@ import sys
 from dal.configuration.config import Config
 from dal.configuration.configmanager import ConfigManager
 
-class TestHelper(object):
+class TestHelper:
 
     ####################################################################################################################
     # Constructor.
@@ -96,7 +96,7 @@ class TestHelper(object):
     def create_database(self):
 
         # Check if have test data.
-        if self._environments is None or len(self._environments) <= 0:
+        if not self._environments:
             raise Exception('No test environments are defined.')
 
         # Create root path.
@@ -109,7 +109,7 @@ class TestHelper(object):
     def create_files(self):
 
         # Check if have test data.
-        if self._environments is None or len(self._environments) <= 0:
+        if not self._environments:
             raise Exception('No test environments are defined.')
 
         # Collect all the paths we need to create.

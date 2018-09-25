@@ -2,7 +2,7 @@ import threading
 
 from dal.context.dbconnection import DbConnection
 
-class DbConnectionManager(object):
+class DbConnectionManager:
 
     ####################################################################################################################
     # Constructor.

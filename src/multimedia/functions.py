@@ -47,6 +47,7 @@ def popen_and_wait_for_exit(need_stdin, on_exit, on_process_started, popen_argum
     """
 
     def run():
+
         if need_stdin:
             process = subprocess.Popen(
                 popen_arguments,
@@ -55,10 +56,10 @@ def popen_and_wait_for_exit(need_stdin, on_exit, on_process_started, popen_argum
                 stderr=subprocess.PIPE)
         else:
             process = subprocess.Popen(popen_arguments)
+
         on_process_started(process)
         process.wait()
         on_exit()
-        return
 
     thread = threading.Thread(target=run, args=())
     thread.start()

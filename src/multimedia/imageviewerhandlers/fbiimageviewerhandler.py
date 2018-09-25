@@ -3,7 +3,7 @@ import subprocess
 
 from multimedia.functions import terminate_process
 
-class FbiImageViewerHandler(object):
+class FbiImageViewerHandler:
     """
     Interface for fbi (Linux Frame Buffer Image Viewer) which is a command line application that uses Linux Frame Buffer
     to display images.

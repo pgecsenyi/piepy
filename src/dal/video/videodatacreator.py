@@ -167,7 +167,7 @@ class VideoDataCreator(Creator):
 
         # Check if the given language is already inserted.
         language_id = self._retriever.retrieve_language_id(language)
-        if language_id != None:
+        if language_id is not None:
             return language_id
 
         # Connect to the database.
@@ -203,7 +203,7 @@ class VideoDataCreator(Creator):
 
         # Check if the given quality is already inserted.
         quality_id = self._retriever.retrieve_quality_id(quality)
-        if quality_id != None:
+        if quality_id is not None:
             return quality_id
 
         # Connect to the database.
@@ -274,7 +274,7 @@ class VideoDataCreator(Creator):
 
         # Check if the given quality is already inserted.
         title_id = self._retriever.retrieve_title_id(title, parent_id)
-        if title_id != None:
+        if title_id is not None:
             return title_id
 
         # Connect to the database.

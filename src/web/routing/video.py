@@ -68,7 +68,7 @@ def route_video_titles():
 
 def _retrieve_titles(filters):
 
-    if filters is None or len(filters) <= 0:
+    if not filters:
         return video_dal_retriever.retrieve_titles()
 
     video_title_filter = VideoTitleFilter()

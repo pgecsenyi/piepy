@@ -31,3 +31,7 @@ class AudioPlayerAdapter(PlayerAdapter):
     def _get_file_by_id(self, file_id):
 
         return self._audio_dal_retriever.retrieve_path(file_id)
+
+    def _get_subtitle_by_id(self, file_id):
+
+        return None

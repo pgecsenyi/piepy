@@ -1,4 +1,4 @@
-class IndexerPolicy(object):
+class IndexerPolicy:
     """
     Represents a set of rules followed during the indexing process. This class knows which Collector has to be invoked
     for which types of files and also stores filters that can modify the catalogization behavior.
@@ -25,7 +25,7 @@ class IndexerPolicy(object):
         ### Validate parameters.
         if collector is None:
             raise Exception('collector cannot be None.')
-        if collectibles is None or len(collectibles) <= 0:
+        if not collectibles:
             raise Exception('collectibles cannot be None or empty.')
 
         ### Attributes from outside.

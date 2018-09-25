@@ -1,4 +1,4 @@
-class ImageViewerHandler(object):
+class ImageViewerHandler:
     """
     Interface that describes how an image viewer handler should look like.
     """

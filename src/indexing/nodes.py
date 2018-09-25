@@ -1,4 +1,4 @@
-class Node(object):
+class Node:
     """
     Stores the path of a file system entry. Also stores a token for it, which for example can be an identifier of it's
     type.

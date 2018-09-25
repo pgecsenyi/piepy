@@ -1,4 +1,4 @@
-class VideoTitleFilter(object):
+class VideoTitleFilter:
 
     ####################################################################################################################
     # Constructor.

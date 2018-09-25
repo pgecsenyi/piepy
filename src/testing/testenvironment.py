@@ -1,4 +1,4 @@
-class TestEnvironment(object):
+class TestEnvironment:
 
     ####################################################################################################################
     # Public methods.

@@ -28,7 +28,7 @@ class VideoCollector(Collector):
     def collect_categorized(self, categorized_nodes):
 
         # Nothing to do here.
-        if categorized_nodes is None or len(categorized_nodes) <= 0:
+        if not categorized_nodes:
             return
 
         # Choose the appropriate action by examining the token. Process videos first so their IDs will be available when
@@ -44,7 +44,7 @@ class VideoCollector(Collector):
     def collect_uncategorized(self, uncategorized_nodes):
 
         # Nothing to do here.
-        if uncategorized_nodes is None or len(uncategorized_nodes) <= 0:
+        if not uncategorized_nodes:
             return
 
         # Choose the appropriate action by examining the token.
@@ -73,7 +73,7 @@ class VideoCollector(Collector):
                 self._video_dal.creator.insert_subtitle(file_id, subtitle_language_id, node.path)
                 title_id = self._get_title_id(node.meta)
                 self._video_dal.creator.insert_title_sl_mapping(title_id, subtitle_language_id)
-                if episode_title_id != None:
+                if episode_title_id is not None:
                     self._video_dal.creator.insert_title_sl_mapping(episode_title_id, subtitle_language_id)
 
     def _store_categorized_video(self, node):

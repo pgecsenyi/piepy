@@ -1,6 +1,6 @@
 from multimedia.constants import AUDIO_OUTPUT_DIGITAL
 
-class PlayingState(object):
+class PlayingState:
 
     ####################################################################################################################
     # Constructor.
@@ -31,7 +31,7 @@ class PlayingState(object):
     def track_id(self, value):
         self._track_id = value
 
-class PlaylistTrack(object):
+class PlaylistTrack:
 
     ####################################################################################################################
     # Constructor.

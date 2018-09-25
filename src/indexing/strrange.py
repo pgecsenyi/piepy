@@ -1,4 +1,4 @@
-class StrRange(object):
+class StrRange:
     """
     Stores the beginning and the ending of a range in a string.
     """

@@ -1,4 +1,4 @@
-class Retriever(object):
+class Retriever:
 
     ####################################################################################################################
     # Constructor.
@@ -51,7 +51,7 @@ class Retriever(object):
             # Build and execute the query.
             cursor.execute('SELECT COUNT(*) FROM ' + table_name)
             rows = cursor.fetchall()
-            if rows is None or len(rows) <= 0:
+            if not rows:
                 return None
             result = rows[0][0]
 

@@ -7,7 +7,7 @@ from dal.playlist.entities import PlaylistHeader as PlaylistHeaderDal
 from dal.playlist.playlistdatahandler import PlaylistDataHandler
 from multimedia.playlist.entities import PlaylistTrack as TrackMedia
 
-class PlaylistManager(object):
+class PlaylistManager:
     """
     Manages playlists, interacts with DAL and MULTIMEDIA modules.
     """
@@ -60,7 +60,7 @@ class PlaylistManager(object):
     def add_playlist(self, new_playlist):
 
         if new_playlist is None:
-            return
+            return None
 
         new_playlist_dal = self._newplaylist_to_dal(new_playlist)
         new_playlist_id = self._data_handler.insert_playlist(new_playlist_dal)
@@ -93,7 +93,7 @@ class PlaylistManager(object):
         if playlist_id is None:
             return
 
-        if (self._playlist != None) and (playlist_id == self._playlist.playlist_id):
+        if (self._playlist is not None) and (playlist_id == self._playlist.playlist_id):
             self._playlist_handler.clear()
 
         self._data_handler.delete_playlist(playlist_id)
@@ -125,7 +125,7 @@ class PlaylistManager(object):
     def play(self, playlist_id):
 
         if playlist_id is None:
-            return
+            return False
 
         # Retrieve and cache playlist.
         playlist_dal = self._data_handler.retrieve_playlist(playlist_id)
@@ -134,7 +134,9 @@ class PlaylistManager(object):
         # Pass it's tracks to the media module.
         tracks_media = self._tracks_to_media(self._playlist.tracks)
         self._playlist_handler.add_tracks(tracks_media)
-        self._playlist_handler.play()
+        result = self._playlist_handler.play()
+
+        return result
 
     def previous(self):
 
@@ -159,7 +161,7 @@ class PlaylistManager(object):
 
     def stop(self):
 
-        self._playlist_handler.stop()
+        return self._playlist_handler.stop()
 
     def update_playlist(self, playlist_header):
 
@@ -204,7 +206,7 @@ class PlaylistManager(object):
 
         for new_track_bll in new_tracks_bll:
             track_dal = self._newtrack_to_dal(new_track_bll)
-            if track_dal != None:
+            if track_dal is not None:
                 tracks_dal.append(track_dal)
 
         return tracks_dal
@@ -267,7 +269,7 @@ class PlaylistManager(object):
 
         for track_dal in tracks_dal:
             track_bll = self._track_to_bll(track_dal)
-            if track_bll != None:
+            if track_bll is not None:
                 tracks_bll.append(track_bll)
 
         return tracks_bll

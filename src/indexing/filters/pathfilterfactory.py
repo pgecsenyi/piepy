@@ -1,4 +1,4 @@
-class PathFilterFactory(object):
+class PathFilterFactory:
     """
     An interface for building a filter stack which consists of zero or more filters. Different filter factories can be
     created for different file types.

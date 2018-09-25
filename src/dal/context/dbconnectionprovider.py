@@ -1,6 +1,6 @@
 from dal.context.dbconnectionadapter import DbConnectionAdapter
 
-class DbConnectionProvider(object):
+class DbConnectionProvider:
 
     ####################################################################################################################
     # Constructor.

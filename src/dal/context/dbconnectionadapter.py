@@ -1,4 +1,4 @@
-class DbConnectionAdapter(object):
+class DbConnectionAdapter:
 
     ####################################################################################################################
     # Constructor.

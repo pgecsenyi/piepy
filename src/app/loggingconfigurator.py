@@ -7,7 +7,7 @@ import logging.handlers
 
 from dal.configuration.configmanager import ConfigManager
 
-class LoggingConfigurator(object):
+class LoggingConfigurator:
     """
     Implements logging configurator logic.
     """
@@ -86,11 +86,11 @@ class LoggingConfigurator(object):
         if logging_config.level is not None:
             if logging_config.level == 'critical':
                 return logging.CRITICAL
-            elif logging_config.level == 'debug':
+            if logging_config.level == 'debug':
                 return logging.DEBUG
-            elif logging_config.level == 'info':
+            if logging_config.level == 'info':
                 return logging.INFO
-            elif logging_config.level == 'warning':
+            if logging_config.level == 'warning':
                 return logging.WARNING
 
         return logging.ERROR
@@ -108,7 +108,7 @@ class LoggingConfigurator(object):
 
         if self._log_path_override is not None:
             return self._log_path_override
-        elif logging_config.path is not None:
+        if logging_config.path is not None:
             return logging_config.path
 
         return None

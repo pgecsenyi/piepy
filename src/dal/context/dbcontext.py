@@ -1,7 +1,7 @@
 from dal.context.dbconnectionmanager import DbConnectionManager
 from dal.context.dbconnectionprovider import DbConnectionProvider
 
-class DbContext(object):
+class DbContext:
 
     ####################################################################################################################
     # Constructor.

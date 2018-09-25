@@ -1,6 +1,6 @@
 from multimedia.playlist.entities import PlayingState
 
-class PlaylistHandler(object):
+class PlaylistHandler:
 
     ####################################################################################################################
     # Constructor.
@@ -97,23 +97,25 @@ class PlaylistHandler(object):
         if not self._is_playing:
             return False
 
-        if self._current_state.player_handler != None:
+        if self._current_state.player_handler is not None:
             self._current_state.player_handler.pause()
             self._is_paused = not self._is_paused
             self._is_playing = not self._is_playing
+
+        return True
 
     def play(self, track_id=None):
         """
         Plays the tracks from the playlist starting with the specified track.
         """
 
-        if len(self._playlist) <= 0:
+        if not self._playlist:
             return False
         if self._is_paused:
             self.pause()
 
         first_track = self._playlist[0]
-        if track_id != None:
+        if track_id is not None:
             first_track = self._get_track(track_id)
         if first_track is None:
             return False
@@ -197,9 +199,11 @@ class PlaylistHandler(object):
 
         next_track = self._get_next_track(self._current_state.track_id)
         if next_track is None:
-            return
+            return False
 
         self._play_track(next_track)
+
+        return True
 
     def _play_previous_track(self):
 
@@ -208,15 +212,17 @@ class PlaylistHandler(object):
 
         previous_track = self._get_previous_track(self._current_state.track_id)
         if previous_track is None:
-            return
+            return False
 
         self._play_track(previous_track)
+
+        return True
 
     def _play_track(self, track):
 
         label = track.label
         player_handler = self._player_handler
-        if label != None and label in self._player_handlers:
+        if label is not None and label in self._player_handlers:
             player_handler = self._player_handlers[label]
 
         if player_handler != self._current_state.player_handler:
