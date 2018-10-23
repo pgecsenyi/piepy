@@ -33,7 +33,7 @@ report_test_path="${data_path}/report_testing.txt"
 if [ $action = "lint" ]; then
     pipenv run pylint --rcfile=.pylintrc app bll dal indexing multimedia test testing web > "${report_lint_path}"
 elif [ $action = "test" ]; then
-    pipenv run python test.py -p ../data/testdata 2> "${report_test_path}"
+    pipenv run python test_runner.py -p ../data/testdata 2> "${report_test_path}"
 elif [ $action = "start" ]; then
     FLASK_ENV=development pipenv run python main.py -c "${config_path}" -d
 else
