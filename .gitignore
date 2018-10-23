@@ -2,6 +2,9 @@
 /data
 /src/testdata
 
+# Visual Studio Code configuration.
+.vscode/settings.json
+
 # Python bytecode files.
 *.pyc
 
