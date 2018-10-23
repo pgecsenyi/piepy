@@ -31,7 +31,7 @@ report_lint_path="${data_path}/report_code_quality.txt"
 report_test_path="${data_path}/report_testing.txt"
 
 if [ $action = "lint" ]; then
-    pipenv run pylint --rcfile=.pylintrc app bll dal indexing multimedia test testing web > "${report_lint_path}"
+    pipenv run python lint_runner.py > "${report_lint_path}"
 elif [ $action = "test" ]; then
     pipenv run python test_runner.py -p ../data/testdata 2> "${report_test_path}"
 elif [ $action = "start" ]; then
