@@ -2,6 +2,7 @@ import subprocess
 import time
 
 import requests
+import requests.exceptions
 
 class ServerManager:
 
@@ -41,8 +42,11 @@ class ServerManager:
 
         for _ in range(0, 10):
             time.sleep(1)
-            response = requests.get(base_url)
-            if response.status_code == 200:
-                return True
+            try:
+                response = requests.get(base_url)
+                if response.status_code == 200:
+                    return True
+            except requests.exceptions.ConnectionError:
+                pass
 
         return False
