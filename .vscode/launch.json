@@ -11,7 +11,10 @@
             "cwd": "${workspaceRoot}/src",
             "args": [
                 "--config=../data/config.json"
-			],
+            ],
+            "env": {
+                "FLASK_ENV": "development"
+            },
             "debugOptions": [
                 "WaitOnAbnormalExit",
                 "WaitOnNormalExit",

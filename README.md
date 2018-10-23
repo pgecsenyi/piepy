@@ -10,7 +10,7 @@ First of all make sure you have Python 3 and pip installed along with an appropr
 
 Copy the contents of the folder `src` to a location of your choice and navigate to it in the _Terminal_. Then run the following command.
 
-    python -m pipenv update
+    python -m pipenv install
 
 You can generate a configuration file by executing the server with the `-i` switch.
 
@@ -32,7 +32,7 @@ Please note the following.
 
 Install developer dependencies first by running the following command.
 
-    pipenv update --dev
+    pipenv install --dev
 
 There is a script called `run.sh` in the `src` folder. It accepts 2 parameters. The first parameter can have one of the following values.
 

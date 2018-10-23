@@ -35,7 +35,7 @@ if [ $action = "lint" ]; then
 elif [ $action = "test" ]; then
     pipenv run python test.py -p ../data/testdata 2> "${report_test_path}"
 elif [ $action = "start" ]; then
-    pipenv run python main.py -c "${config_path}" -d
+    FLASK_ENV=development pipenv run python main.py -c "${config_path}" -d
 else
     print_usage_then_exit
 fi
