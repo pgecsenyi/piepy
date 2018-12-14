@@ -18,7 +18,6 @@ class Collector:
         categorized_nodes : list of CategorizedNode
             The list of the nodes to collect.
         """
-        pass
 
     def collect_uncategorized(self, uncategorized_nodes):
         """
@@ -29,4 +28,3 @@ class Collector:
         uncategorized_nodes : list of UncategorizedNode
             The list of the nodes to collect.
         """
-        pass

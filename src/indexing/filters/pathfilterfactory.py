@@ -16,4 +16,3 @@ class PathFilterFactory:
         -------
         A list of filters.
         """
-        pass
