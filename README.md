@@ -61,5 +61,5 @@ _Visual Studio Code_ can be used to debug the application, in order to do that y
     * feh 2.19 Compile-time switches: curl exif xinerama
     * xdotool 3.20160805.1
   * Code editor
-    * Visual Studio Code 1.25.1
-      * Extension: Python 2018.7.1
+    * Visual Studio Code 1.28.2
+      * Extension: Python 2018.12.0
